@@ -1,0 +1,265 @@
+div#Title{
+    position:relative;
+    margin-top:50px;
+    width: 1200px;
+    margin-left:100px;
+}
+
+div#Title h2{
+    font-size:50px;
+}
+
+
+div#content{
+    position:relative;
+    margin-top:80px;
+    margin-left:100px;
+    padding-bottom:800px;
+}
+
+div#Box1{
+    position:absolute;
+    top:0px;
+    left:400px;
+    border:1px solid #C1C1C1;
+    width:800px;
+    height:400px;
+}
+
+div#Box2{
+    position:absolute;
+    top:400px;
+    left:400px;
+    border:1px solid #C1C1C1;
+    width:800px;
+    margin-top:40px;
+    height:400px;
+}
+
+div#sidenav li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+div#sidenav li{
+    position:relative;
+    left:-30px;
+    list-style-type: none;
+}
+
+div#sidenav a{
+    font-size:30px;
+
+}
+
+div#sidenav a.active{
+    color:#FFD6D6;
+}
+
+div#content a{
+   color:#C1C1C1;
+   text-decoration:none;
+}
+
+div#content a:hover{
+    opacity:0.5;
+}
+
+div#content hr{
+    border:none;
+    color: #C1C1C1;
+    opacity:0.8;
+}
+
+
+div#content p {
+    font-size:25px;
+}
+
+div#Box1 div#innerbox2{
+    position:absolute;
+    top:90px;
+    left:400px;
+}
+
+div#Box1 a{
+    font-size:20px;
+}
+
+div#box1 a:nth-child(2){
+    position:absolute;
+    margin-top:-50px;
+}
+
+p#email{
+    text-decoration: underline;
+}
+
+div.headers h3{
+   position:relative;
+   top:10px;
+   font-size:30px;
+}
+
+div.headers{
+    background-color:#FFD6D6;
+}
+
+div#Box2 a:not(:last-child){
+    margin:bottom:200px;
+}
+
+div#Box2 a{
+    font-size:20px;
+}
+
+div#Box1 img{
+    width:400px;
+    height:200px;
+    object-fit:fit;
+}
+
+div#PurchaseHistory{
+    display:flex;
+    position:relative;
+    align-items: center;
+    justify-content: center;
+    top:90px;
+}
+
+div#changeordelete{
+    position:absolute;
+    top:140px;
+    left:400px;
+}
+
+div#changeordelete span{
+    position:absolute;
+    top:2px;
+}
+
+div#changeordelete a:last-child{
+    margin-left:10px;
+}
+
+p#center{
+    display:flex;
+    position:relative;
+    align-items: center;
+    justify-content: center;
+}
+
+a#center{
+    position:absolute;
+    left:270px;
+}
+
+div#Box1 form{
+    margin-left:20px;
+}
+
+#languages{
+    width:500px;
+}
+
+div#Box1 form label{
+    font-size:25px;
+}
+
+div#Form{
+    position:relative;
+    border:1px solid #C1C1C1;
+    margin-left:300px;
+    margin-top:100px;
+    width:1000px;
+    padding-bottom:50px;
+
+}
+
+div#Form input:not(:first-child){
+    width:500px;
+    margin-left:30px;
+    margin-top:20px;
+}
+
+div#Back a{
+    font-size:25px;
+    color:#C1C1C1;
+    text-decoration: none;
+}
+
+div#Back a:hover{
+
+    opacity:0.5;
+}
+
+div#Back{
+    position:absolute;
+    top:320px;
+    left:120px;
+}
+
+
+div#divsecond{
+    position:relative;
+    width:530px;
+
+
+}
+
+div#divsecond button{
+    position:relative;
+    top:-39px;
+    float:right;
+}
+
+div#newemail{
+    margin-top:-100px;
+}
+
+input#submit{
+    position:relative;
+    width:140px;
+    float:right;
+    right:25px;
+
+}
+.fa-eye{
+    position:absolute;
+    margin-left: 480px;
+    margin-top:-25px;
+}
+
+div#Form p{
+    position:absolute;
+    margin-left:30px;
+    color:red;
+}
+
+div#Form label{
+    position:relative;
+    top:25px;
+    left:30px;
+}
+
+
+#cardtype{
+    width:500px;
+    margin-left:30px;
+    margin-top:20px;
+}
+
+
+div#Form img{
+    position:absolute;
+    width:200px;
+    height:200px;
+    object-fit:contain;
+    right:50px;
+    top:-30px;
+}
+
+div.text-danger{
+    position:absolute;
+    left:30px;
+}
+

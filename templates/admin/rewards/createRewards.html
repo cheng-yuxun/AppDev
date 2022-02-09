@@ -1,0 +1,56 @@
+{% extends "layouts/admin_base.html" %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
+
+
+<h1 class="display-4">Create Rewards</h1>
+
+<form method="POST" action="{{url_for('rewards.create')}}" enctype="multipart/form-data">
+  <div class="form-group">
+    {{ render_field(form.name, class="form-control") }}
+  </div>
+  <div class="form-group">
+      {{ render_field(form.points, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.category, class="form-check", style="list-style-type:none") }}
+  </div>
+    <div class="form-group">
+    {{ render_field(form.code, class="form-control") }}
+  </div>
+    <div class="form-group">
+    {{ render_field(form.description, class="form-control") }}
+  </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div style="color: red;font-size: 18px;">
+            <b>{{ messages[0] }}</b>
+        </div>
+    {% endif %}
+    {% endwith %}
+    <div class="form-group">
+    {{ render_field(form.date_start, class="form-control") }}
+    </div>
+    <div class="form-group">
+    {{ render_field(form.date_expire, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.picture, class="form-control") }}
+  </div>
+  <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+
+
+{% endblock %}
+
+

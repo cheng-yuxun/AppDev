@@ -1,0 +1,145 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Create Product
+{% endblock title %}
+{% block content %}
+<link href="/static/css/Account/UserDetails.css" rel="stylesheet" />
+
+
+<div id="Title">
+    <h2>User details</h2>
+
+    <hr>
+</div>
+
+<br>
+
+<div id="content">
+
+        <div> <input type="text" placeholder="Search for User" id="searchbar" > </div>
+
+
+        <div class="dropdown" id="sortby">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort By
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button class="dropdown-item" type="button" onclick="filterSelection('all')">All</button>
+            <button class="dropdown-item" type="button" onclick="filterSelection('active')">Active</button>
+            <button class="dropdown-item" type="button" onclick="filterSelection('deactivated')">Deactivated</button>
+          </div>
+        </div>
+
+
+
+        <div id="user">
+                {% for user in user_dict %}
+                    {% if user_dict[user].get_status() == 'Active' %}
+                    <div id="userbox" class="filterDiv active">
+                        <div id="image">
+                            <img src="/static/media/profilepic/{{ user_dict[user].get_image() }}">
+                        </div>
+
+                        <div id="innercontent">
+                            <p>{{ user_dict[user].get_username() }}</p>
+                            <a class="btn btn-outline-danger" href="/DeactivateAccount/{{ user_dict[user].get_uuid() }}">Deactivate Account</a>
+
+                        </div>
+                            <p id="status" style="color:#52C44B">{{ user_dict[user].get_status()}}</p>
+
+                    </div>
+
+                    {% else %}
+
+                    <div id="userbox" class="filterDiv deactivated">
+                        <div id="image">
+                            <img src="/static/media/profilepic/{{ user_dict[user].get_image() }}">
+                        </div>
+
+                        <div id="innercontent">
+                            <p>{{ user_dict[user].get_username() }}</p>
+                            <a class="btn btn-outline-success" href="/ReactivateAccount/{{ user_dict[user].get_uuid() }}">Reactivate Account</a>
+
+                        </div>
+
+                            <p id="status" style="color:#ff0000">{{ user_dict[user].get_status()}}</p>
+
+                    </div>
+
+
+                    {% endif %}
+                {% endfor %}
+        </div>
+
+</div>
+
+<script>
+
+        var input = document.getElementById("searchbar");
+        input.addEventListener("input", myFunction);
+
+        function myFunction(e) {
+          var filter = e.target.value.toUpperCase();
+
+          var list = document.getElementById("user");
+          var divs = list.getElementsByTagName("div");
+          for (var i = 0; i < divs.length; i++) {
+            var p = divs[i].getElementsByTagName("p")[0];
+            if (p) {
+              if (p.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                divs[i].style.display = "";
+              } else {
+                divs[i].style.display = "none";
+              }
+            }
+          }
+        }
+
+
+
+        filterSelection("all")
+        function filterSelection(c) {
+          var x, i;
+          x = document.getElementsByClassName("filterDiv");
+          if (c == "all") c = "";
+          for (i = 0; i < x.length; i++) {
+            w3RemoveClass(x[i], "show");
+            if (x[i].className.indexOf(c) > -1) w3AddClass(x[i], "show");
+          }
+        }
+
+        function w3AddClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            if (arr1.indexOf(arr2[i]) == -1) {element.className += " " + arr2[i];}
+          }
+        }
+
+        function w3RemoveClass(element, name) {
+          var i, arr1, arr2;
+          arr1 = element.className.split(" ");
+          arr2 = name.split(" ");
+          for (i = 0; i < arr2.length; i++) {
+            while (arr1.indexOf(arr2[i]) > -1) {
+              arr1.splice(arr1.indexOf(arr2[i]), 1);
+            }
+          }
+          element.className = arr1.join(" ");
+        }
+
+
+
+</script>
+<script src="/static/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="static/js/datatables-simple-demo.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+{% endblock %}

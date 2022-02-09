@@ -1,0 +1,148 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+Login
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<link rel="stylesheet" type="text/css" href="static/css/user/Login.css">
+
+<!-- Login popup form -->
+{% if not loggedin %}
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-90" id="LoginForm">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+                <div><a onclick="window.location= '/' " id="cross">X</a></div>
+
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                <br>
+
+                {% if error == "NoAccountMade" %}
+                <br>
+                <p class="error">Account does not exist </p>
+
+                {% elif error == "deactivated" %}
+                <br>
+                <p class="error">Account has been locked please contact our staff to unlock it </p>
+
+                {% elif error == "timeout" %}
+                <br>
+                <p class="error">You guess the password wrong too many times. Try again later. </p>
+                {% endif %}
+                <form method="POST" action="">
+                    <div>
+                        {{ render_field(form.username_or_email , class="form-control") }}
+                    </div>
+                    <br>
+                    <div>
+                        {{ render_field(form.password , class="form-control" ) }}
+                        {% if error == "wrongpassword" %}
+                        <p class="error">Wrong password</p>
+                        {% endif %}
+                        <br>
+                        <a onclick="openforgetpasswordform()"  class="text-white-50 fw-bold">Forget Password?</a>
+                    </div>
+
+                    <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                </form>
+
+            </div>
+
+            <div>
+              <p class="mb-0">Don't have an account? <a href="/SignUp" class="text-white-50 fw-bold">Sign Up</a></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-90" id="ForgetPassword">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+                <h2 class="fw-bold mb-2 text-uppercase">Forget Your Password?</h2>
+                <p class="text-white-50 mb-5">Enter the email that you used to register your account. We will send you instructions on how to reset your password</p>
+
+                <form method="POST" action="">
+                    <div>
+                        {{ render_field(form2.Email , class="form-control") }}
+                    </div>
+                        {% if error == "NoEmail" %}
+                        <p class="error">Invalid email</p>
+                        {% endif %}
+                    <br>
+                    <br>
+                    <button class="btn btn-outline-light btn-lg px-5" type="submit" >Send Email</button>
+
+                </form>
+            </div>
+
+            <div>
+              <p class="mb-0">Remember your password? <a onclick="closeforgetpasswordform()" class="text-white-50 fw-bold" >Sign In</a></p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+
+    var error = {{ error|tojson }}
+    if (error == 'NoAccountMade' || error == 'wrongpassword' || error == 'deactivated' || error== 'timeout'){
+    document.getElementById('LoginForm').style.display = 'block';
+    }
+
+    else if(error == 'NoEmail'){
+        document.getElementById('ForgetPassword').style.display = 'block';
+    }
+
+
+    var expire = {{ expirytime|tojson }}
+    var timeout_expire = {{ timeout_expiry|tojson }}
+    let session = {{session|tojson}};
+    console.log(session)
+    console.log(timeout_expire)
+    console.log(expire)
+
+    const source = new EventSource("/generate_time");
+    source.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        console.log(data.time)
+        if (data.time >= expire){
+            window.location = '/passwordexpire'
+            console.log('ok')
+        }
+
+        if (data.time >= timeout_expire){
+            window.location = '/timeoutexpire'
+        }
+
+     }
+
+</script>
+<script src="/static/js/user/Login.js"></script>
+{% endif %}
+
+
+{% endblock %}

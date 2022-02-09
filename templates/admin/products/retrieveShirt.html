@@ -1,0 +1,105 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}Library Loan System - Retrieve Shirts{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Retrieve Shirts</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no shirts.</p>
+  {% elif count == 1 %}
+  <p>There is 1 shirt.</p>
+  {% else %}
+  <p>There are {{ count }} shirts.</p>
+  {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Price</th>
+        <th>Product Type</th>
+          <th>Image</th>
+          <th>Size</th>
+          <th>Color</th>
+          <th>Brand</th>
+        <th>Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for shirt in shirts_list %}
+      <tr>
+        <td>{{ shirt.get_product_id() }}</td>
+        <td><a href="/shirt_details/{{shirt.get_product_id()}}">{{ shirt.get_name() }}</a></td>
+        <td>{{ shirt.get_price() }}</td>
+        {% if shirt.get_ptype() == "S" %}
+        <td>Shirt</td>
+        {% elif shirt.get_ptype() == "F" %}
+        <td>Footwear</td>
+        {% elif shirt.get_ptype() == "O" %}
+        <td>Others</td>
+        {% endif %}
+        <td><div class="d-flex justify-content-center">
+    <img src="{{url_for('static', filename='image/' + shirt.get_product_id() + '.png')}}"
+    alt="shirt image" style="width: 32px; height: 32px;">
+</div></td>
+          {% if shirt.get_ssize() == "S" %}
+        <td>Small</td>
+        {% elif shirt.get_ssize() == "M" %}
+        <td>Medium</td>
+        {% elif shirt.get_ssize() == "L" %}
+        <td>Large</td>
+        {% endif %}
+
+          {% if shirt.get_color() == "G" %}
+        <td>Green</td>
+        {% elif shirt.get_color() == "B" %}
+        <td>Blue</td>
+        {% elif shirt.get_color() == "R" %}
+        <td>Red</td>
+        {% endif %}
+
+        <td>{{ shirt.get_comments() }}</td>
+        <td><a href="/updateShirt/{{shirt.get_product_id()}}" class="btn btn-warning">Edit</a></td>
+        <td>
+  <form action="{{url_for('delete_shirt', id=shirt.get_product_id())}}" method="POST">
+    <!--<input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{shirt.get_name()}} {{shirt.get_ptype()}}?');">-->
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#myModal_{{shirt.get_product_id()}}">
+      Delete
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal_{{shirt.get_product_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Are you sure you want to delete {{shirt.get_name()}} {{shirt.get_ptype()}}?
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <input type="submit" value="Delete" class="btn btn-danger">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

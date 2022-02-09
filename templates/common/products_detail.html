@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+{% block title %}Redstore - preview{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<div class="d-flex justify-content-center">
+    <img src="{{url_for('static', filename='/media/img_prod/' + products_id.get_product_id() + '.png')}}"
+        alt="product image" style="width: 400px; height: 400px;">
+</div>
+<div>
+    <div class="col mb-5">
+        <div class="card h-100">
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <h1>{{ products_id.get_name() }}</h1>
+                    <h2>Price: {{ products_id.get_price() }}</h2>
+                    <h3>Stock: {{ products_id.get_stock() }}</h3>
+                    <p>{{ products_id.get_comments() }}</p>
+
+                    <div class="col-lg-6">
+                        <form action="{{url_for('base.addcart', id=products_id.get_product_id())}}" id="products_id.get_product_id()">
+                            <div class="d-flex justify-content-end mt-4">
+                                <button class="btn btn-primary btn-sm w-50 h-30 d-flex align-items-center justify-content-center px-0"><i class="bi bi-cart-fill"></i>Add to
+                                    Cart</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

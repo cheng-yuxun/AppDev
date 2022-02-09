@@ -1,0 +1,57 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+My Profile
+{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/UserProfile.css">
+
+<div id="content">
+
+<div id="Title">
+   <h2>{{ userprofile_name }}'s Profile <span></span><a href="/UpdateProfile" class="btn btn-outline-light btn-lg px-3">Edit Profile</a></h2>
+
+</div>
+    <br>
+<div id="Profile">
+
+    <img src="/static/media/profilepic/{{userprofile_image}}">
+
+    <div id="align">
+        <div id="name">
+            <p>{{ userprofile_name }}</p>
+        </div>
+
+
+        <div id="birthday">
+            <p>Birthday</p>
+        </div>
+
+    </div>
+
+    <div id="align2">
+
+        <div id="aboutme">
+            {% if userprofile_AboutMe!=none %}
+            {{ userprofile_AboutMe }}
+            {% endif %}
+        </div>
+
+        <div id="birthdate">
+            {{ userprofile_birthdate }}
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}

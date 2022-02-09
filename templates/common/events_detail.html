@@ -1,0 +1,148 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Details
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <!-- img -->
+            <div class="col-lg-6">
+                <img src="{{url_for('static', filename='media/event_img/' + events_id.get_uuid() + '.png')}}"
+                    class="card-img-top img-fluid" alt="event image">
+            </div>
+            <!-- details -->
+            <div class="col-lg-6">
+                <h1>{{ events_id.get_name() }}</h1>
+                <p class="text-sm mb-4">{{ events_id.get_desc() }}</p>
+                {% if events_id.get_category() == 'Onsite' %}
+                <p class="text-success">{{ events_id.get_remainder() }}/{{ events_id.get_quantity() }} remaining
+                    space(s)</p>
+                {% endif %}
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p class="text-sm mt-3">{{ events_id.get_date() }}</p>
+                                    <p>from {{ events_id.get_start_time() }} to {{ events_id.get_end_time() }}</p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <form action="{{url_for('base.addcart', id=events_id.get_uuid())}}"
+                                        id="events_id.get_uuid()">
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button
+                                                class="btn btn-dark btn-sm w-50 h-30 d-flex align-items-center justify-content-center px-0">
+                                                Sign Up</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {% if events_id.get_category() == 'Onsite' %}
+            <h2 class="mt-4">Meeting Location</h2>
+            <p style="font-size: 20px;">{{ events_id.get_location() }} at {{ events_id.get_address() }}</p>
+            <div class="d-flex justify-content-center">
+                <div id="map" style="height:500px; width:100%; margin: 0px 10px 15px 0px;"></div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+{% if events_id.get_category() == 'Onsite' %}
+{% if events_id.get_location() == 'Decathlon SGLab' %}
+<script>
+
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.30425, lng: 103.88239 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.30425, lng: 103.88239 },
+                content: '230 Stadium Blvd, Singapore 397799'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% else %}
+<script>
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.32292, lng: 103.92240 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.32293, lng: 103.92240 },
+                content: '750A Chai Chee Rd, #01-01 ESR BizPark @Chai Chee, Singapore 469001'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% endif %}
+{% endif %}
+{% endblock %}

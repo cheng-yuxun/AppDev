@@ -1,0 +1,130 @@
+div#Container {
+    display:block;
+    position:absolute;
+    left:50%;
+    transform: translate(-50% , 30%);
+    background-color:white;
+    width: 1000px;
+}
+
+div#Container h3{
+
+}
+
+div#Formbox{
+    position:relative;
+    display:flex;
+    padding-top:30px;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+
+i#togglePassword{
+    position:absolute;
+    margin-left: 450px;
+    margin-top:-25px;
+}
+
+i#toggleConfirmPassword{
+    position:absolute;
+    margin-left: 450px;
+    margin-top:-25px;
+}
+
+div #button{
+    position:relative;
+    float:right;
+    top:-30px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    background-opacity:0.1;
+}
+
+#Code{
+    position:absolute;
+    margin-bottom:25px;
+}
+
+#codefield{
+    position:absolute;
+}
+
+#codefield div.text-danger{
+    position:absolute;
+    top:60px;
+    left:2px;
+}
+
+
+
+#h3{
+    position:absolute;
+    right:0px;
+    top:0px;
+}
+
+#h3 a{
+    text-decoration: none;
+}
+
+#buttons{
+    display:flex;
+    justify-content:center;
+}
+
+.button7{
+display:inline-block;
+padding:0.7em 1.7em;
+margin:0 0.3em 0.3em 0;
+border-radius:0.2em;
+box-sizing: border-box;
+text-decoration:none;
+font-family:'Roboto',sans-serif;
+font-weight:400;
+color:#FFFFFF;
+background-color:#3369ff;
+box-shadow:inset 0 -0.6em 1em -0.35em rgba(0,0,0,0.17),inset 0 0.6em 2em -0.3em rgba(255,255,255,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+text-align:center;
+position:relative;
+}
+a.button7:active{
+box-shadow:inset 0 0.6em 2em -0.3em rgba(0,0,0,0.15),inset 0 0 0em 0.05em rgba(255,255,255,0.12);
+}
+@media all and (max-width:30em){
+a.button7{
+display:block;
+margin:0.4em auto;
+}
+}
+
+
+#button:hover{
+    color:#3369ff;
+}
+
+
+#resend{
+    position:relative;
+    float:right;
+    top:-55px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    background-opacity:0.1;
+}
+
+#resend:hover:enabled{
+    color:#3369ff;
+}
+
+div#Formbox p.error{
+    position:absolute;
+    color:red;
+}
+
+
+div.text-danger{
+    position:absolute;
+    left:260px;
+    width:300px;
+}

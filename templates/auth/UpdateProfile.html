@@ -1,0 +1,74 @@
+{% extends 'layouts/userbase.html' %}
+{% from "/_formHelper.html" import render_field %}
+{% block title %}
+Update Profile
+{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/UserProfile.css">
+
+<div id="content">
+
+    <div id="Title">
+        <h2>{{ userprofile_name }}'s Profile <span></span>  <a href="/Profile" class="btn btn-outline-light btn-lg px-3">Back to Profile</a> </h2>
+
+    </div>
+
+    <div id="Profile">
+
+        <img src="/static/media/profilepic/{{ userprofile_image }}" id="your-image">
+
+        <form method="post" enctype="multipart/form-data">
+
+            <div id="file">
+                {{render_field(form.file , class="form-control" , id="file" , onchange="previewImage(event)")}}
+                {% if error == True %}
+                <p style="color:#ff0000">Images only</p>
+                {% endif %}
+            </div>
+
+            <div>
+                {{render_field(form.usernamefield , class="form-control" , id="username")}}
+
+            </div>
+
+            <div>
+                {{render_field(form.birthdatefield , class="form-control")}}
+
+            </div>
+
+            <div>
+                {{render_field(form.AboutMefield , class="form-control")}}
+
+            </div>
+
+            <div>
+
+
+            <input type="submit" value="Submit" class="btn btn-outline-success"/>
+            <a href="/Profile" class="btn btn-outline-danger">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+			var previewImage = function(event) {
+				var preview = document.getElementById('your-image');
+				preview.src = URL.createObjectURL(event.target.files[0]);
+
+			};
+</script>
+
+{% endblock %}
+
+{% block footer %}
+{% endblock footer %}
+
+
+
+

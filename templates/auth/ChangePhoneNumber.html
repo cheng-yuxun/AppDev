@@ -1,0 +1,78 @@
+{% extends 'layouts/userbase.html' %}
+{% from "/_formHelper.html" import render_field %}
+{% block title %}
+Account Details
+{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/Accountdetails.css">
+
+{% if userprofile_phonenumber == none %}
+
+<div id="Title">
+    <h2>Add phone number</h2>
+    <hr>
+</div>
+<br>
+
+<div id="Back">
+    <a href="/AccountDetails">Back</a>
+</div>
+
+<div id="Form">
+    <form method="post">
+        <div>
+            {{ render_field(form.Phonenumber , class="form-control" , oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');") }}
+        </div>
+
+        <div>
+            <input type="submit" value="Add Number" class="btn btn-outline-success" id="submit"/>
+        </div>
+
+    </form>
+</div>
+
+
+{% else %}
+
+
+<div id="Title">
+    <h2>Change phone number</h2>
+    <hr>
+</div>
+<br>
+
+<div id="Back">
+    <a href="/AccountDetails">Back</a>
+</div>
+
+<div id="Form">
+    <form method="post">
+        <div>
+            {{ render_field(form.Phonenumber , class="form-control" , oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');") }}
+        </div>
+
+        <div>
+            {{ render_field(form.NewPhonenumber , class="form-control" , oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');") }}
+            {% if existing == 'SamePhoneNumber' %}
+            <p id="error">That is already your phone number</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <input type="submit" value="Save changes" class="btn btn-outline-success" id="submit"/>
+        </div>
+    </form>
+</div>
+
+
+
+{% endif %}
+{% endblock %}
+
+
+
+{% block footer %}
+{% endblock footer %}

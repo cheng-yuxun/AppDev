@@ -1,0 +1,105 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+Account Details
+{% endblock title %}
+
+{% block content %}
+
+
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/Accountdetails.css">
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes id="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+<div id="Title">
+    <h2>{{ userprofile_name }}'s Account</h2>
+    <hr>
+</div>
+
+<br>
+
+<div id="content">
+
+    <div id="sidenav">
+        <ul>
+            <li><a href="/AccountDetails" class="sidelinks">Account Details</a></li>
+            <li><a href="/PaymentDetails" class="sidelinks">Payment Details</a></li>
+            <li><a href="/Language" class="sidelinks">Language</a></li>
+        </ul>
+
+    </div>
+
+    <div id="Box1">
+        <div class="headers">
+            <h3>Contact Info</h3>
+            <hr>
+        </div>
+        <br>
+        <div>
+            <p>Email Address</p>
+            <p id="email">{{ userprofile_email }}</p>
+            <br>
+            <a href="/ChangeEmail">Change email address</a>
+        </div>
+
+        <div id="innerbox2">
+            <p>Mobile Number</p>
+            {% if userprofile_phonenumber == none %}
+            <a href="/ChangePhoneNumber">Add phone number</a>
+
+            {% else %}
+            <p> {{ userprofile_phonenumber }} </p>
+            <br>
+            <a href="/ChangePhoneNumber">Change phone number</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+    <div id="Box2">
+        <div class="headers">
+            <h3>Account Security</h3>
+            <hr>
+        </div>
+        <br>
+        <div>
+            <a href="/changepassword">Change my password</a>
+            <br>
+            <br>
+            <a href="#">Add two-factor authentication</a>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+    if ($('#flashes').length){
+        $("#flashes").delay(5000).slideUp(300);
+    }
+
+     $(".sidelinks").each(function() {
+        if (this.href == window.location.href) {
+            $(this).addClass("active");
+        }
+    });
+});
+
+
+
+
+
+</script>
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}

@@ -1,0 +1,49 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Onsite form
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<div class="d-flex justify-content-center">
+    <div class="col-lg-5">
+        <nav>
+            <ul class="nav nav-tabs">
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/admin_events_detail/{{events_id.get_uuid()}}">Info</a>
+                </li>
+                {% if events_id.get_category() == 'Onsite' %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin/update/{{events_id.get_uuid()}}/onsite">Update</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin/update/{{events_id.get_uuid()}}/livestream">Update</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <p style="font-size: 30px;"><strong><a href="/admin/events"><i class="fa fa-arrow-left"
+                                aria-hidden="true"></i></a>
+                        livestream Class Form</strong></p>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ render_field(form.name, class="form-control", placeholder="Name") }}
+                    {{ render_field(form.desc, class="form-control", placeholder="Description") }}
+                    {{ render_field(form.date, class="form-control datepicker") }}
+                    {{ render_field(form.start_time, class="form-control") }}
+                    {{ render_field(form.end_time, class="form-control") }}
+                    {{ render_field(form.image, class="form-control") }}
+                    {{ render_field(form.link, class="form-control") }}
+                    <input type="submit" value="Confirm" class="btn btn-success mt-2">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

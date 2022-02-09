@@ -1,0 +1,103 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+Account Details
+{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/Accountdetails.css">
+
+<div id="Title">
+    <h2>{{ userprofile_name }}'s Account</h2>
+    <hr>
+</div>
+
+<br>
+
+<div id="content">
+    <div id="sidenav">
+        <ul>
+            <li><a href="/AccountDetails" class="sidelinks">Account Details</a></li>
+            <li><a href="/PaymentDetails" class="sidelinks">Payment Details</a></li>
+            <li><a href="/Language" class="sidelinks">Language</a></li>
+        </ul>
+
+    </div>
+
+    <div id="Box1">
+        <div class="headers">
+            <h3>Payment Option</h3>
+            <hr>
+        </div>
+        <br>
+
+        <div>
+            {% if userprofile_creditcard == none %}
+
+            <p id="center">Currently you have no payment options</p>
+
+            <br>
+
+            <a href="/EditPaymentMethod" class="btn btn-outline-secondary" id="center">ADD PAYMENT METHOD</a>
+
+            {% else %}
+
+            <div>
+
+                {% if userprofile_creditcard == 'Visa' %}
+                <img src='https://www.investopedia.com/thmb/1IVupa7WPkyjIVLKezgBowB52DM=/800x450/filters:fill(auto,1)/full-color-800x450-cee226a48bed4177b90351075b332227.jpg'>
+                {% elif userprofile_creditcard == 'MasterCard' %}
+                <img src="https://www.marketing91.com/wp-content/uploads/2017/10/Marketing-Strategy-of-Mastercard-3.jpg">
+                {% endif %}
+
+            </div>
+
+            <div id="innerbox2">
+                <p>{{ userprofile_creditcard }} ending in **{{ userprofile_creditcardno[-2:] }}</p>
+            </div>
+
+            <div id="changeordelete">
+                <a href="/EditPaymentMethod">Change</a>
+                <span >|</span>
+                <a href="/DeletePaymentMethod">Delete</a>
+            </div>
+
+
+            {% endif %}
+        </div>
+    </div>
+        <div id="Box2">
+            <div class="headers">
+            <h3 >Purchase History</h3>
+            <hr>
+            </div>
+            <br>
+
+            <div id="PurchaseHistory">
+                <p>No purchase history yet</p>
+            </div>
+
+        </div>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+      $(".sidelinks").each(function() {
+        if (this.href == window.location.href) {
+            $(this).addClass("active");
+
+        }
+    });
+
+});
+</script>
+
+{% endblock %}
+
+
+
+{% block footer %}
+{% endblock footer %}

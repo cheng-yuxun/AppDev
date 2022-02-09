@@ -1,0 +1,212 @@
+div#Title{
+    position:relative;
+    margin-top:50px;
+    width: 1600px;
+    margin-left:100px;
+}
+
+div#Title h2{
+    font-size:50px;
+}
+
+div#sidenav{
+    bordert:1px solid black;
+}
+
+
+div#sidenav li:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+div#sidenav li{
+    position:relative;
+    left:-30px;
+    list-style-type: none;
+}
+
+
+div#sidenav a{
+    font-size:30px;
+    text-decoration:none;
+}
+
+div#sidenav a.active{
+    color:#FFD6D6;
+}
+
+div#sidenav a{
+   color:#C1C1C1;
+}
+
+div#sidenav a:hover{
+    text-decoration:none;
+    opacity:0.5;
+}
+
+
+div#content{
+    position:relative;
+    margin-top:80px;
+    margin-left:100px;
+    padding-bottom:800px;
+}
+
+
+div#Friendlist{
+    position:absolute;
+    top:150px;
+    left:400px;
+    width:1400px;
+
+}
+
+div#userbox{
+    float:left;
+    width:380px;
+    overflow:hidden;
+    border:1px solid black;
+    margin-bottom:20px;
+}
+
+div#userbox:hover {
+    cursor:pointer;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+div#userbox:nth-child(n){
+    margin-right:20px;
+}
+
+div#userbox img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:50%;
+    margin-top:20px;
+    margin-left:10px;
+    border:1px solid black;
+}
+
+div#userbox div#innercontent{
+    position:relative;
+    width:300px;
+    top:-120px;
+    left:180px;
+}
+
+div#userbox div#innercontent p{
+    position:relative;
+    text-align-center;
+    font-size:20px;
+    word-wrap:break-word;
+}
+
+div#userbox div#innercontent a{
+    position:relative;
+
+}
+
+div#FriendTitle{
+    position:absolute;
+    top:0px;
+    left:400px;
+    width:800px;
+}
+
+
+div#FriendTitle a{
+    position:relative;
+    margin-left:10px;
+    top:-2px;
+}
+
+div#FriendTitle div:first-child p{
+    font-size:25px;
+}
+
+div#FriendTitle div:first-child span{
+    position:relative;
+    margin-left:2px;
+    top:1px;
+    color:#C1C1C1;
+}
+
+div#FriendTitle input#searchbar{
+    position:relative;
+    width:300px;
+    padding: 8px;
+    font-size: 17px;
+    border: 1px solid grey;
+}
+
+div#FriendTitle input#searchbar:focus{
+    outline:none;
+}
+
+
+p#lonely{
+    position:relative;
+    top:200px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+p#NearU{
+    font-size:20px;
+}
+
+div#sidenav span{
+    color:red;
+    font-size:20px;
+    position:relative;
+    top:-10px;
+}
+
+
+div#userboxSP{
+    float:left;
+    width:480px;
+    overflow:hidden;
+    border:1px solid black;
+    margin-bottom:20px;
+}
+
+div#userboxSP:hover {
+    cursor:pointer;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
+div#userboxSP:nth-child(n+2){
+    margin-right:20px;
+}
+
+div#userboxSP img{
+    width:150px;
+    height:150px;
+    object-fit:contain;
+    border-radius:50%;
+    margin-top:20px;
+    margin-left:10px;
+    border:1px solid black;
+}
+
+div#userboxSP div#innercontent{
+    position:relative;
+    width:300px;
+    top:-120px;
+    left:180px;
+}
+
+div#userboxSP div#innercontent p{
+    position:relative;
+    text-align-center;
+    font-size:20px;
+    word-wrap:break-word;
+}
+
+div#userboxSP div#innercontent a{
+    position:relative;
+
+}
+

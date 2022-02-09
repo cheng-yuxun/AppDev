@@ -1,0 +1,122 @@
+body{
+    background-color:grey;
+}
+
+
+div#content{
+    position:absolute;
+    display:block;
+    left:50%;
+    transform: translate(-50% , 0%);
+}
+
+div#Title{
+    margin-top:60px;
+    position:relative;
+    width:1200px;
+    word-wrap:break-word;
+}
+
+div#Title span{
+    position:relative;
+    margin-left:15px;
+}
+
+div#Title h2 {
+    position:relative;
+    font-size:40px;
+}
+
+div#Profile{
+    position:relative;
+    background-color:white;
+    padding-bottom:400px;
+    width:1200px;
+}
+
+
+
+div#Profile img{
+    position:relative;
+    top:30px;
+    left:20px;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:1px solid black;
+    object-fit:cover;
+    overflow: hidden;
+}
+
+
+div#align{
+    position:relative;
+    margin-top:-130px;
+    width:800px;
+    left:250px;
+    font-size:40px;
+}
+
+div#align2{
+    position:relative;
+    left:250px;
+    width:800px;
+    margin-top:40px;
+    font-size:25px;
+}
+
+div#align div#name{
+    position:relative;
+    width:350px;
+    word-wrap: break-word;
+}
+
+div#align2 div#aboutme {
+    position:relative;
+    width:350px;
+    word-wrap: break-word;
+}
+
+div#align div#birthday{
+    position:absolute;
+    width:300px;
+    top:0px;
+    left:450px;
+}
+
+div#align2 div#birthdate{
+   position:absolute;
+   width:300px;
+   top:0px;
+   left:450px;
+
+}
+
+form div:not(:last-child){
+    margin-top:20px;
+    margin-left:40px;
+    width:800px;
+}
+
+form div:first-child{
+    margin-top:80px;
+}
+
+form div:nth-last-child(2){
+    margin-bottom:60px;
+}
+
+form div:last-child{
+    position:absolute;
+    right:20px;
+}
+
+form div:last-child input{
+    margin-right:10px;
+}
+
+div.text-danger{
+    position:absolute;
+    left:40px;
+    width:300px;
+}

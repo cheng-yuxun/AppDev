@@ -1,0 +1,214 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Onsite form
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<div class="row">
+    <!-- LHS -->
+    <div class="col-lg-5">
+        <nav>
+            <ul class="nav nav-tabs">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/admin_events_detail/{{events_id.get_uuid()}}">Info</a>
+                </li>
+                {% if events_id.get_category() == 'Onsite' %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                        href="/admin/update/{{events_id.get_uuid()}}/onsite">Update</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page"
+                        href="/admin/update/{{events_id.get_uuid()}}/livestream">Update</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <p style="font-size: 30px;"><strong><a href="/admin/events"><i class="fa fa-arrow-left"
+                                aria-hidden="true"></i></a>
+                        Onsite Class Form</strong></p>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ render_field(form.name, class="form-control", placeholder="Name") }}
+                    {{ render_field(form.desc, class="form-control", placeholder="Description") }}
+                    {{ render_field(form.date, class="form-control datepicker") }}
+                    {{ render_field(form.start_time, class="form-control") }}
+                    {{ render_field(form.end_time, class="form-control") }}
+                    {{ render_field(form.image, class="form-control") }}
+                    {{ render_field(form.location, class="form-control", placeholder="{{ events_id.get_location }}") }}
+                    {{ render_field(form.quantity, class="form-control", placeholder="Quantity") }}
+                    {{ render_field(form.price, class="form-control", placeholder="Price") }}
+                    <input type="submit" value="Confirm" class="btn btn-success mt-2">
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- RHS -->
+    <div class="col-lg-7">
+        <nav>
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Preview</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="card mb-4">
+            <div class="card-header">
+                <p style="font-size: 30px;"><strong>
+                        Preview</strong></p>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row mb-5">
+                        <!-- img -->
+                        <div class="col-lg-6">
+                            <img src="{{url_for('static', filename='media/event_img/' + events_id.get_uuid() + '.png')}}"
+                                class="card-img-top img-fluid" alt="event image">
+                        </div>
+                        <!-- details -->
+                        <div class="col-lg-6">
+                            <h1 style="font-size: 20px;">{{ events_id.get_name() }}</h1>
+                            <p class="text-sm" style="font-size: 15px;">{{ events_id.get_desc() }}</p>
+                            {% if events_id.get_category() == 'Onsite' %}
+                            <p class="text-success" style="font-size: 15px;">{{ events_id.get_remainder() }}/{{
+                                events_id.get_quantity() }}
+                                remaining
+                                space(s)</p>
+                            {% endif %}
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class="text-sm" style="font-size: 13px;">{{ events_id.get_date() }}
+                                                </p>
+                                                <p style="font-size: 12.5px;">from {{ events_id.get_start_time() }} to
+                                                    {{ events_id.get_end_time()
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div class="col">
+                                                <div class="d-flex justify-content-end mt-3">
+                                                    <button
+                                                        class="btn btn-dark btn-sm w-50 h-30 d-flex align-items-center justify-content-center px-0">
+                                                        Sign Up</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        {% if events_id.get_category() == 'Onsite' %}
+                        <h2 class="mt-4" style="font-size: 20px;">Meeting Location</h2>
+                        <p style="font-size: 15px;">{{ events_id.get_location() }} at {{ events_id.get_address() }}</p>
+                        <div class="d-flex justify-content-center">
+                            <div id="map" style="height:300px; width:600px;"></div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% if events_id.get_category() == 'Onsite' %}
+                {% if events_id.get_location() == 'Decathlon SGLab' %}
+                <script>
+
+                    function initMap() {
+                        // map options
+                        var options = {
+                            zoom: 18,
+                            center: { lat: 1.30425, lng: 103.88239 }
+                        }
+
+                        // new map
+                        var map = new
+                            google.maps.Map(document.getElementById('map'), options);
+
+                        var markers = [
+                            {
+                                coords: { lat: 1.30425, lng: 103.88239 },
+                                content: '230 Stadium Blvd, Singapore 397799'
+                            }
+                        ];
+
+                        // addmarker loop
+                        for (var i = 0; i < markers.length; i++) {
+                            addMarker(markers[i]);
+                        }
+
+                        function addMarker(props) {
+                            var marker = new google.maps.Marker({
+                                position: props.coords,
+                                map: map,
+                            });
+                            // check content
+                            if (props.content) {
+                                var infoWindow = new google.maps.InfoWindow({
+                                    content: props.content
+                                });
+
+                                marker.addListener('click', function () {
+                                    infoWindow.open(map, marker);
+                                });
+                            }
+                        }
+                    }
+                </script>
+                {% else %}
+                <script>
+
+                    function initMap() {
+                        // map options
+                        var options = {
+                            zoom: 12,
+                            center: { lat: 1.32292, lng: 103.92240 }
+                        }
+
+                        // new map
+                        var map = new
+                            google.maps.Map(document.getElementById('map'), options);
+
+                        var markers = [
+                            {
+                                coords: { lat: 1.32293, lng: 103.92240 },
+                                content: '750A Chai Chee Rd, #01-01 ESR BizPark @Chai Chee, Singapore 469001'
+                            }
+                        ];
+
+                        // addmarker loop
+                        for (var i = 0; i < markers.length; i++) {
+                            addMarker(markers[i]);
+                        }
+
+                        function addMarker(props) {
+                            var marker = new google.maps.Marker({
+                                position: props.coords,
+                                map: map,
+                            });
+                            // check content
+                            if (props.content) {
+                                var infoWindow = new google.maps.InfoWindow({
+                                    content: props.content
+                                });
+
+                                marker.addListener('click', function () {
+                                    infoWindow.open(map, marker);
+                                });
+                            }
+                        }
+                    }
+                </script>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

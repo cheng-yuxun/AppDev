@@ -1,0 +1,35 @@
+{% extends "layouts/admin_base.html" %}
+{% block title %}Redstore - product preview{% endblock %}
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<p style="font-size: 30px;"><strong><a href="{{url_for('products.retrieve_product')}}"><i class="fa fa-arrow-left"
+                aria-hidden="true"></i></a>
+        User's View</strong></p>
+<div>
+    <div class="col mb-5">
+        <div class="card">
+
+            <div class="d-flex justify-content-center">
+                <img src="{{url_for('static', filename='/media/img_prod/' + products_id.get_product_id() + '.png')}}"
+                    alt="product image" class="card-img-top" style="height: 600px; width: 1200px;">
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <h1>{{ products_id.get_name() }}</h1>
+            <h2>S{{ products_id.get_price() }}</h2>
+
+        </div>
+
+        <div class="card-footer">
+            <p style="font-size: 30px;"><strong>Description</strong></p>
+            <p style="font-size: 25px;">{{ products_id.get_comments() }}</p>
+            <p><a href="#"><button class="btn btn-primary"><i class="bi bi-cart-fill"></i>Add to
+                        Cart</button></a></p>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

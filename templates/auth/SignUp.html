@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title> Sign Up Form </title>
+    <link rel="stylesheet" type="text/css" href="/static/css/Account/SignUp.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Bootstrap 5.1.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+</head>
+
+
+{% from "/_formHelper.html" import render_field %}
+
+<div id="Container">
+    <h2>Create Your Account </h2>
+
+    <div id="h3">
+        <h3>Already have an account? <a href="/LoginPage">Login</a> here</h3>
+    </div>
+
+    <div id="Formbox">
+        <form method="post" action="" id="signupf">
+            <div class="form-group">
+                {{ render_field(form.username , class="form-control") }}
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                {{ render_field(form.Switching , class="form-control" , id="switch") }}
+                {% if error %}
+                <p class="error">Email already existing</p>
+                {% endif %}
+                <button type="button" value="sent" onclick="validated(form.Switching)" id="button" name="button">Send
+                    Email Code</button>
+
+            </div>
+            <br>
+
+
+            <div class="form-group" id="codefield">
+                {{render_field(form.Code , class= "form-control" , id="Code" , onkeyup = "check()" , oninput="this.value
+                = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');") }}
+                <button id="resend" onclick="resendcode()">Resend</button>
+            </div>
+
+
+            <div class="form-group">
+                {{render_field(form.password , class="form-control" , id = "password") }}
+                <i class="far fa-eye" id="togglePassword"></i>
+            </div>
+            <br>
+
+            <div class="form-group">
+                {{render_field(form.confirmpassword , class="form-control" , id = "confirmpassword") }}
+                <i class="far fa-eye" id="toggleConfirmPassword"></i>
+
+            </div>
+            <br>
+
+            <div class="form-group">
+                {{render_field(form.birthdate , class= "form-control") }}
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                {{render_field(form.notification , class= "form-control-checkbox") }}
+                <label> Receive special promotions and notifications about new products. </label>
+            </div>
+
+            <br>
+            <br>
+            <br>
+
+            <div class="form-group">
+                <p>By signing up, you agree with our Terms of use and Privacy policies</p>
+
+
+                <div id="buttons">
+                    <input type="submit" value="Submit" class="button7" id="submit" />
+                    <button type="button" onclick="window.location = '/'" class="button7" id="Cancel"
+                        style="background-color:#CCCCCC; color:#000000">Cancel</button>
+                </div>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    var submit = {{ submit| tojson }}
+    console.log(submit)
+    var box = document.getElementById("codefield")
+    var button = document.getElementById("button")
+    var Code = document.getElementById("Code")
+    var label = document.querySelector('label[for="Code"]');
+
+    console.log(Code)
+    if (submit == 'submit') {
+        box.style.position = 'relative'
+        Code.style.display = 'block'
+        Code.style.position = 'relative'
+        button.style.display = 'none'
+        label.textContent = ' Email Verification Code'
+
+    }
+
+</script>
+<script src="/static/js/user/Forms.js"></script>

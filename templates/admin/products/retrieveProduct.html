@@ -1,0 +1,134 @@
+{% extends "layouts/admin_base.html" %}
+
+
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $("#myInput").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#myTable tr").filter(function () {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+      });
+    });
+  });
+</script>
+
+<h1 class="display-4">Retrieve Products</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no products.</p>
+  {% elif count == 1 %}
+  <p>There is 1 product.</p>
+  {% else %}
+  <p>There are {{ count }} products.</p>
+  {% endif %}
+</div>
+<div class="card mb-4">
+  <div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Products
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-end">
+      <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()"
+        placeholder="Search for products..">
+
+      <a href="/admin/createProduct">
+        <button class="btn btn-primary">
+          + Add Products
+        </button>
+      </a>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Product ID</th>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Product Type</th>
+          <th>Image</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        {% for product in products_list %}
+        <tr>
+          <td>{{ product.get_product_id() }}</td>
+          <td><a href="/admin/product_details/{{product.get_product_id()}}">{{ product.get_name() }}</a></td>
+          <td>{{ product.get_price() }}</td>
+          {% if product.get_ptype() == "S" %}
+          <td>Shirt</td>
+          {% elif product.get_ptype() == "F" %}
+          <td>Footwear</td>
+          {% elif product.get_ptype() == "O" %}
+          <td>Others</td>
+          {% endif %}
+          <td>
+            <div class="d-flex justify-content-center">
+              <img src="{{url_for('static', filename='/media/img_prod/' + product.get_product_id() + '.png')}}"
+                alt="event image" style="width: 32px; height: 32px;">
+            </div>
+          </td>
+          <td>{{ product.get_stock() }}</td>
+          {% if product.get_status() == 'Available' %}
+          <td>
+            <form action="{{url_for('products.status_products', id=product.get_product_id())}}"
+              id="product.get_product_id()" method="POST">
+              <button class="btn btn-success">{{ product.get_status() }}</button>
+            </form>
+          </td>
+          {% else %}
+          <td>
+            <form action="{{url_for('products.status_products', id=product.get_product_id())}}"
+              id="product.get_product_id()" method="POST">
+              <button class="btn btn-danger">{{ product.get_status() }}</button>
+            </form>
+          </td>
+          {% endif %}
+          <td><a href="/admin/updateProduct/{{product.get_product_id()}}" class="btn btn-warning">Edit</a></td>
+          <td>
+            <form action="{{url_for('products.delete_product', id=product.get_product_id())}}" method="POST">
+              <!--<input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{product.get_name()}} {{product.get_ptype()}}?');">-->
+              <!-- Button to Open the Modal -->
+              <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                data-bs-target="#deleteModal_{{product.get_product_id()}}">
+                Delete
+              </button>
+
+              <!-- The Modal -->
+              <div class="modal" id="deleteModal_{{product.get_product_id()}}">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">Delete Confirmation</h4>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                      Are you sure you want to delete {{product.get_name()}} {{product.get_ptype()}}?
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <input type="submit" value="Delete" class="btn btn-danger">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

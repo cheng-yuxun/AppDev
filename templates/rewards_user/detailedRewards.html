@@ -1,0 +1,133 @@
+{% block content %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Tables - SB Admin</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/Details.css') }}">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="clientDetails">
+            <div id="custPoints" class="custPoints">Points available: {{points}}</div>
+        </div>
+        <div class="detailed_rewards">
+            <div><img src="{{url_for('static', filename='assets/img/' + rewards.get_picture())}}" style="width: 640px"/></div>
+            <div class="impt_details">
+            <h1>Name: <div>{{ rewards.get_name() }}</div></h1>
+            <h2>Points: <div id="rewardPoints">{{rewards.get_points() }}</div></h2>
+            <h2> Description:</h2>
+            <h3>{{rewards.get_description() }}</h3>
+            <button id="myBtn2">Redeem</button>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+
+              <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <!--FORM-->
+                    <!--NO ACTION TO BE TAKEN UNLESS ACCEPTABLE QUANTITY-->
+                    <!--form id = "formQtySubmit" method="POST" enctype="multipart/form-data"-->
+                    <p>
+                        <button class="btn btn-default" onclick="sub()">-</button>
+                        <!--Quantity does not increase should rewards.get_points() * quantity > points-->
+                        <input id="count" name="count" placeholder="Quantity">
+                        <button class="btn btn-default" onclick="add()">+</button>
+                    </p>
+                    <!--input type="submit" class="submitBtn" value="Redeem" id="myBtn3"-->
+                    <button id="myBtn3"><a id="redeemSuccess">Redeem</a></button>
+                    <!--/form-->
+                    <!--FORM-->
+                </div>
+            </div>
+
+            </div>
+        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script>
+    <script>
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn2");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        var initial = 0;
+        var cost = 1;
+
+        var counter = document.getElementById("count");
+        var toChange = document.getElementById("redeemSuccess");
+        var redeemBtn = document.getElementById("myBtn3");
+        //var formQtySubmit = document.getElementById("formQtySubmit");
+
+        //var rewardPoints = document.getElementById("rewardPoints").value; //UNDEFINED
+        var rewardPoints = {{rewards.get_points()}};
+        //var custPoints = document.getElementById("custPoints").value; //UNDEFINED
+        var custPoints = {{points}};
+        var totalRedemptions = Math.floor(parseInt(custPoints)/parseInt(rewardPoints));
+        console.log(counter.value, rewardPoints, custPoints);
+
+        function sub(){
+            initial = Math.max(0, --initial);
+            //counter.value = initial * cost;
+            update(initial);
+        }
+
+        function add(){
+            if(counter.value < totalRedemptions){
+                initial += 1;
+                //counter.value = initial * cost;
+                //console.log(counter.value, totalRedemptions);
+                update(initial);
+            }
+
+        }
+
+        function update(){
+            counter.value = initial * cost;
+            if(counter.value > 0){
+                //add in route details pertaining to no of points per voucher and qty redeemed
+                const ref = "/redeemedRewards/" + rewardPoints + "/" + counter.value;
+                toChange.href = ref;
+
+                //CHANGE ACTION OF FORM, ALLOW TO PROCEED
+                //const ref = "/redeemedRewards/" + rewardPoints;
+                //formQtySubmit.action = ref;
+            }
+            else{
+                toChange.removeAttribute("href");
+                //formQtySubmit.action = "/";
+                //OR
+                //formQtySubmit.removeAttribute("action");
+            }
+        }
+        //localStorage.setItem('count', counter);
+
+
+
+
+</script>
+    </body>
+</html>
+
+{% endblock %}
+

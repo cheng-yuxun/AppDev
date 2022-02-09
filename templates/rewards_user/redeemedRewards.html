@@ -1,0 +1,27 @@
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/Details.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <title>Title</title>
+</head>
+<body>
+    <div class="clientDetails">
+        <div class="custPoints">Points available: {{points}}</div>
+    </div>
+    <div id="user">
+        <div><h1>Number of vouchers redeemed: {{qty}}</h1></div><br>
+        <div><h1>Points deducted: {{redeemedPts}}</h1></div><br>
+        <div><h1>Points remaining: {{points}}</h1></div><br>
+        <button id="myBtn2"><a href="/rewards_ava">Back to vouchers</a></button>
+    </div>
+
+
+    <script>
+        window.localStorage.getItem('user');
+    </script>
+</body>
+</html>
+
+{% endblock %}

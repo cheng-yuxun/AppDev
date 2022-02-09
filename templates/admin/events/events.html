@@ -1,0 +1,317 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Event Frontpage
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+
+<!-- flash message here -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+{% if category == 'error' %}
+<div class="alert alert-danger alter-dismissable fade show" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-bs-dismiss="alert">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+{% else %}
+<div class="alert alert-success alter-dismissable fade show" role="alert">
+    {{ message }}
+    <a href="#" class="close" data-bs-dismiss="alert">&times;</a>
+</div>
+{% endif %} {% endfor %} {% endif %} {% endwith %}
+
+<h1 class="mt-4">Events</h1>
+<!-- chart starts from here -->
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                Number Of Events
+            </div>
+            <div class="card-body"><canvas id="myChart" width="100%" height="40"></canvas></div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                Another Chart
+            </div>
+            <div class="card-body">
+                <div class="chart-container" style="position: relative; height:100; width:100%">
+                    <canvas id="dChart" width="400" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- chart ends here -->
+<!-- events table starts from here -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Events
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-end">
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                  Filter by
+                </a>
+              
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <li>
+                    <form action="{{url_for('events.events')}}" method="POST">
+                        <input type="checkbox" value="Onsite" name="onsitecheck">Onsite
+                        <br>
+                        <input type="checkbox" value="Livestream" name="livestreamcheck">Livestream
+                        <br>
+                        {{ render_field(eventfilter.status, class="form-control")}}
+                        {{ render_field(eventfilter.start_date, class="form-control datepicker") }}
+                        {{ render_field(eventfilter.end_date, class="form-control datepicker") }}
+                        <input type="submit" value="Submit">
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()"
+                placeholder="Search for events..">
+
+            <a href="/admin/events/add/onsite">
+                <button class="btn btn-primary">
+                    + Add Events
+                </button>
+            </a>
+        </div>
+        <table class="table table-bordered" style="margin: 10px;">
+            <thead>
+                <tr class="header">
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Countdown</th>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>View</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                {% for events in events_list %}
+                <tr>
+                    <td>{{ events.get_uuid() }}</td>
+                    <td>{{ events.get_name() }}</td>
+                    <td>{{ events.get_category() }}</td>
+                    <td class=" d-flex justify-content-center">
+                        <p id="event_timer{{ events.get_uuid() }}"></p>
+                    </td>
+                    <td>{{ events.get_date() }}</td>
+                    {% if events.get_category() == 'Onsite' %}
+                    <td>{{ events.get_quantity() }}</td>
+
+                    <!-- onsite status -->
+                    {% if events.get_status() == 'Active' %}
+                    <td>
+                        <form action="{{url_for('events.status_event', id=events.get_uuid())}}" id="events.get_uuid()"
+                            method="POST">
+                            <button class="btn btn-success">{{ events.get_status() }}</button>
+                        </form>
+                    </td>
+                    {% elif events.get_status() == 'Inactive' %}
+                    <td>
+                        <form action="{{url_for('events.status_event', id=events.get_uuid())}}" id="events.get_uuid()"
+                            method="POST">
+                            <button class="btn btn-danger">{{ events.get_status() }}</button>
+                        </form>
+                    </td>
+                    {% elif events.get_status() == 'Expired' %}
+                    <td>
+                        <button class="btn btn-secondary">{{ events.get_status() }}</button>
+                    </td>
+                    {% elif events.get_status() == 'Ongoing' %}
+                    <td>
+                        <button class="btn btn-warning">{{ events.get_status() }}</button>
+                    </td>
+                    {% elif events.get_status() == 'Full' %}
+                    <td>
+                        <button class="btn btn-info">{{ events.get_status() }}</button>
+                    </td>
+                    {% endif %}
+                    <!-- onsite status ends here -->
+
+                    {% else %}
+
+                    <!-- livestream status here -->
+                    <td>-</td>
+                    {% if events.get_status() == 'Active' %}
+                    <td>
+                        <form action="{{url_for('events.status_event', id=events.get_uuid())}}" id="events.get_uuid()"
+                            method="POST">
+                            <button class="btn btn-success">{{ events.get_status() }}</button>
+                        </form>
+                    </td>
+                    {% elif events.get_status() == 'Inactive' %}
+                    <td>
+                        <form action="{{url_for('events.status_event', id=events.get_uuid())}}" id="events.get_uuid()"
+                            method="POST">
+                            <button class="btn btn-danger">{{ events.get_status() }}</button>
+                        </form>
+                    </td>
+                    {% elif events.get_status() == 'Expired' %}
+                    <td>
+                        <button class="btn btn-secondary">{{ events.get_status() }}</button>
+                    </td>
+                    {% elif events.get_status() == 'Full' %}
+                    <td>
+                        <button class="btn btn-info">{{ events.get_status() }}</button>
+                    </td>
+                    {% endif %}
+                    <!-- livestream status ends here -->
+
+                    {% endif %}
+                    <td>
+                        <a href="/admin/admin_events_detail/{{events.get_uuid()}}">
+                            <button><i class="bi bi-pencil-square"></i></button></a>
+                    </td>
+                    <td>
+                        <form action="{{url_for('events.delete_event', id=events.get_uuid())}}" method="POST">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#myModal_{{events.get_uuid()}}"><i class="bi bi-trash"></i></button>
+                            <div class="modal" id="myModal_{{events.get_uuid()}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm Delete?</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to delete Event Key {{events.get_uuid()}}?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <input type="submit" value="Delete" class="btn btn-danger">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% for events in events_list %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const countDownDate = new Date("{{ events.get_timer() }}").getTime();
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("event_timer{{ events.get_uuid() }}").innerHTML = days + "d " + hours + "h "
+                + minutes + "m " + seconds + "s ";
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("event_timer{{ events.get_uuid() }}").innerHTML = "-";
+            }
+        }, 1000);
+        console.log(countDownDate)
+    });
+</script>
+{% endfor %}
+
+<script>
+    let count = parseInt('{{ count }}');
+    var ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["January", "February", "March"],
+            datasets: [{
+                backgroundColor: ["red", "green", "blue"],
+                data: [count, 0, 0]
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: "Event Calendar"
+            }
+        }
+    });
+    var ctx = document.getElementById("dChart");
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['OK', 'WARNING', 'CRITICAL', 'UNKNOWN'],
+            datasets: [{
+                label: '# of Tomatoes',
+                data: [12, 19, 3, 5],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            //cutoutPercentage: 40,
+            responsive: false,
+
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#myInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+
+<script>
+    function onsitesearch() {
+        $("#onsitesearch").click(function () {
+            var rows = $("#myTable").find("tr").hide();
+            rows.filter(":contains('Onsite')").show();
+        });
+    }
+    function all() {
+        $("#all").click(function () {
+            $("#myTable").find("tr").show();
+        });
+    }
+    function testing(value) {
+        const URL = '/admin/events'
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', URL);
+        xhr.send(value);
+    }
+</script>
+
+{% endblock content %}

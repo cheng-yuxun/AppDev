@@ -1,0 +1,11 @@
+.navbar-brand{
+    font-size : 50px;
+}
+a{
+    font-size: 20px;
+}
+.navbar-expand-sm .navbar-collapse {
+    display: flex!important;
+    flex-basis: auto;
+    padding: 0px 560px;
+    }

@@ -1,0 +1,179 @@
+
+#myBtn{
+  background-color: white;
+  color: black;
+  border: 2px solid #4CAF50;
+  border-radius: 15px;
+  padding: 10px 20;
+  text-align: center;
+  font-size: 16px;
+  margin: 0 60
+}
+
+#myBtn > a{
+    text-decoration: none;
+    color: black;
+}
+
+#myBtn:hover{
+  background-color: #4CAF50;
+}
+
+#myBtn2{
+  background-color: white;
+  color: black;
+  border: 2px solid #4CAF50;
+  border-radius: 15px;
+  padding: 10px 30;
+  text-align: center;
+  font-size: 16px;
+  margin: 60 250
+}
+#myBtn2 > a{
+    text-decoration: none;
+    color: black;
+}
+#myBtn2:hover{
+  background-color: #4CAF50;
+}
+
+#myBtn3{
+  background-color: white;
+  color: black;
+  border: 2px solid #4CAF50;
+  border-radius: 15px;
+  padding: 10px 30;
+  text-align: center;
+  font-size: 16px;
+  margin: 50 210;
+}
+
+#myBtn3 > a{
+    text-decoration: none;
+    color: black;
+}
+#myBtn3:hover{
+  background-color: #4CAF50;
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.rewards_showcase{
+    width: 1500;
+    height: 600;
+    overflow: auto;
+    padding: 1.5em 1em 1em 1em;
+    margin: 200 100 100 200;
+    border-style: solid;
+    border-color: grey;
+
+ }
+
+.card{
+    position: relative;
+    left: 90px;
+    float: left;
+    width: 220;
+    height: 220;
+}
+.detailed_rewards{
+    width: 700;
+    padding: 20;
+    margin: 200 100 100 200;
+    position:relative;
+    left: 400px;
+ }
+
+.impt_details{
+    margin: 20 0 0 0;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 300px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 2 2 2 8;
+  border: 1px solid #888;
+  width: 30%;
+  height: 300px;
+}
+.modal-content > p{
+    text-align: center;
+}
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#burg{
+  text-align: center;
+}
+.custPoints>h1 {
+    margin: 40 720
+}
+
+.custPoints{
+    float:right;
+    margin: 50 0;
+}

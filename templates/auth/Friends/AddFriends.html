@@ -1,0 +1,90 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+Add Friends
+{% endblock title %}
+
+
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/Friends.css">
+
+<div id="Title">
+    <h2>Add Friends</h2>
+    <hr>
+</div>
+
+
+<div id="content">
+
+    <div id="sidenav">
+        <ul>
+            <li><a href="/Friends" class="sidelinks">Your Friends</a></li>
+            <li><a href="/AddFriend" class="sidelinks">Add Friends</a></li>
+            {% if userprofile_friendrequest != [] %}
+            <li><a href="/PendingRequest" class="sidelinks">Pending Requests</a> <span>!</span></li>
+            {% else %}
+            <li><a href="/PendingRequest" class="sidelinks">Pending Requests</a></li>
+            {% endif %}
+        </ul>
+
+    </div>
+
+    <div id="FriendTitle">
+
+        <div>
+            <input type="search" placeholder="Search for friends" id="searchbar">
+        </div>
+
+    </div>
+
+        <div id="Friendlist">
+           <p id="NearU">Near You</p>
+            {% for user in user_dict %}
+                {% if user != current_user and user not in user_dict[current_user].get_friends() %}
+                <div id="userbox" onclick="window.location.href = '/FriendProfile/{{ user_dict[user].get_uuid() }}'">
+                    <img src="/static/media/profilepic/{{ user_dict[user].get_image() }}">
+                    <div id="innercontent">
+                    <p > {{ user_dict[user].get_username() }}</p>
+                    {% if current_user not in user_dict[user].get_friendrequest() %}
+                        {% if user_dict[user].get_uuid() not in user_dict[current_user].get_friendrequest() %}
+                        <a href="/AddingFriends/{{ user_dict[user].get_uuid() }}" class="btn btn-outline-success">Add Friend</a>
+                        {% else %}
+                        <a href="/AcceptFriendRequest/{{ user_dict[user].get_uuid() }}" class="btn btn-outline-success">Accept request</a>
+                        {% endif %}
+
+                    {% else %}
+                    <a href="/AddingFriends/{{ user_dict[user].get_uuid() }}" class="btn btn-outline-secondary" >Pending Request</a>
+
+                    {% endif %}
+                    </div>
+                </div>
+
+                {% endif %}
+
+            {% endfor %}
+        </div>
+
+
+
+</div>
+
+<script>
+     $(".sidelinks").each(function() {
+        if (this.href == window.location.href) {
+            $(this).addClass("active");
+        }
+    });
+
+
+</script>
+
+<script src="/static/js/user/Friend.js"></script>
+
+{% endblock %}
+
+
+
+{% block footer %}
+{% endblock footer %}

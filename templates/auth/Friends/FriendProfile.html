@@ -1,0 +1,72 @@
+{% extends 'layouts/userbase.html' %}
+{% block title %}
+Friend's Profile
+{% endblock title %}
+
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="/static/css/Account/UserProfile.css">
+
+<div id="content">
+
+    <div id="Title">
+       <h2>{{  Friend.get_username() }}'s Profile <span></span>
+       {% if Friend.get_uuid() not in user.get_friends() %}
+            {% if Friend.get_uuid() in user.get_friendrequest() %}
+            <a href="/AcceptFriendRequest/{{ Friend.get_uuid() }}" class="btn btn-outline-light btn-lg px-3">Accept request</a>
+            <a href="/RejectFriendRequest/{{  Friend.get_uuid() }}" class="btn btn-outline-light btn-lg px-3">Cancel Request</a>
+            {% else %}
+                {% if current_user not in Friend.get_friendrequest() %}
+                <a href="/AddingFriends/{{ Friend.get_uuid() }}" class="btn btn-outline-light btn-lg px-3">Add Friend</a>
+                {% else %}
+                <a href="/AddingFriends/{{ Friend.get_uuid() }}" class="btn btn-outline-light btn-lg px-3">Pending Request</a>
+                {% endif %}
+
+            {% endif %}
+        {% endif %}
+
+       </h2>
+
+    </div>
+    <br>
+    <div id="Profile">
+
+        <img src="/static/media/profilepic/{{Friend.get_image()}}">
+
+
+        <div id="align">
+            <div id="name">
+                <p>{{ Friend.get_username() }}</p>
+            </div>
+
+
+            <div id="birthday">
+                <p>Birthday</p>
+            </div>
+
+        </div>
+
+        <div id="align2">
+
+            <div id="aboutme">
+                {% if Friend.get_AboutMe() !=none %}
+                {{ Friend.get_AboutMe() }}
+                {% endif %}
+            </div>
+
+            <div id="birthdate">
+                {{  Friend.get_birthdate() }}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}

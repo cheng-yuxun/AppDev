@@ -1,0 +1,45 @@
+/* ---------- Login Form ----------- */
+
+
+#LoginForm{
+    z-index: 2;
+}
+
+p.error{
+    color:red;
+}
+
+a#cross{
+    position:absolute;
+    top:5px;
+    right:15px;
+    opacity: 0.3;
+}
+
+a#cross:hover{
+    opacity:1;
+    cursor:pointer;
+}
+
+#LoginForm a:hover{
+    cursor:pointer;
+}
+
+
+#ForgetPassword{
+     position:absolute;
+     display: none;
+     z-index: 2;
+     left:50%;
+     transform: translate(-50% , -20%);
+     top:180px;
+}
+
+#ForgetPassword a:hover{
+    cursor:pointer;
+}
+
+#dropdown button {
+    opacity:0.5;
+}
+/* ---------- End ----------- */

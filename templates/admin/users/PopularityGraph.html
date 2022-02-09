@@ -1,0 +1,278 @@
+{% extends 'layouts/admin_base.html' %}
+{% block title %}
+Create Product
+{% endblock title %}
+{% block content %}
+<link href="/static/css/Account/UserDetails.css" rel="stylesheet" />
+
+<div id="Title">
+    <h2>Popularity Graph</h2>
+
+    <hr>
+</div>
+
+<br>
+
+<div id="content">
+
+
+        <div class="dropdown" id="sortby">
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Sort By <span></span>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <button class="dropdown-item" type="button" onclick="location.reload()">Latest</button>
+            <button class="dropdown-item" type="button" id="Custom">Custom Period</button>
+          </div>
+        </div>
+
+
+        <div id="dateform">
+            <div><a onclick="" id="cross">X</a></div>
+            <label for="startdate">Start date:</label>
+            <input type="date" class="customdatefield" id="startdate" >
+            <br>
+            <br>
+            <label for="enddate">End date:</label>
+            <input type="date" class="customdatefield" id="enddate">
+        </div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <canvas id="canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</div>
+
+<script src="/static/js/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="static/js/datatables-simple-demo.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+
+
+    const config = {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: "Number of user accounts created",
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: [],
+                fill: false,
+            }],
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Analysis of user accounts created per day'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'User Accounts'
+
+                    }
+
+                }]
+            }
+        }
+    };
+
+
+
+    const context = document.getElementById('canvas').getContext('2d');
+
+    const lineChart = new Chart(context, config);
+
+    const source = new EventSource("/generate_graph");
+
+    const Account_database = {{ Accounts_created_dict|tojson }}
+    console.log(Account_database)
+
+
+
+    var time = {{ time|tojson }}
+    year = parseInt(time.slice(-2))
+    month = parseInt(time.slice(0, 2))
+    day = parseInt(time.slice(3 , 5))
+
+
+
+
+
+
+    for (const [key , value] of Object.entries(Account_database)){
+
+
+         if (year > parseInt(key.slice(-2))){
+             config.data.labels.push(key)
+             config.data.datasets[0].data.push(value);
+             lineChart.update();
+         }
+
+         else if (year == parseInt(key.slice(-2))){
+              if(month > parseInt(key.slice(0 , 2))){
+                 config.data.labels.push(key)
+                 config.data.datasets[0].data.push(value);
+                 lineChart.update();
+              }
+
+              else if(month == parseInt(key.slice(0 , 2))){
+                    if(day >=parseInt(key.slice(3 , 5))){
+                       config.data.labels.push(key)
+                       config.data.datasets[0].data.push(value);
+                       lineChart.update();
+                    }
+
+              }
+         }
+
+    }
+
+    const firstlabel = config.data.labels[0]
+    const lastlabel = config.data.labels.at(-1)
+    document.getElementById('startdate').value = firstlabel;
+
+
+
+
+    document.getElementById('cross').addEventListener('click' , function(){
+         dateform = document.getElementById('dateform')
+         dateform.style.display = 'none'
+
+    });
+
+
+    document.getElementById('Custom').addEventListener('click' , function () {
+           dateform = document.getElementById('dateform')
+           dateform.style.display = 'block'
+
+    });
+
+
+    document.getElementById('startdate').addEventListener('change' , function (){
+            const enddate = document.getElementById('enddate')
+            const startdate = document.getElementById('startdate')
+            finalstartdate = startdate.value[5] + startdate.value[6] + '/' + startdate.value[8] + startdate.value[9] + '/' + startdate.value[2] + startdate.value[3]
+            finalenddate = enddate.value[5] + enddate.value[6] + '/' + enddate.value[8] + enddate.value[9] + '/' + enddate.value[2] + enddate.value[3]
+            console.log(finalenddate)
+            const dates = [...Object.keys(Account_database)]
+            const indexstartdate = dates.indexOf(finalstartdate)
+            const indexenddate = dates.indexOf(finalenddate)
+
+            const filterDate = dates.slice(indexstartdate , indexenddate + 1);
+            lineChart.config.data.labels = filterDate;
+            lineChart.update();
+            source.close();
+    });
+
+
+    document.getElementById('enddate').addEventListener('change' , function (){
+            const enddate = document.getElementById('enddate')
+            const startdate = document.getElementById('startdate')
+            finalstartdate = startdate.value[5] + startdate.value[6] + '/' + startdate.value[8] + startdate.value[9] + '/' + startdate.value[2] + startdate.value[3]
+            finalenddate = enddate.value[5] + enddate.value[6] + '/' + enddate.value[8] + enddate.value[9] + '/' + enddate.value[2] + enddate.value[3]
+            const dates = [...Object.keys(Account_database)]
+            const indexstartdate = dates.indexOf(finalstartdate)
+            const indexenddate = dates.indexOf(finalenddate)
+            console.log(indexstartdate)
+            console.log()
+            const filterDate = dates.slice(indexstartdate , indexenddate + 1);
+            console.log(filterDate)
+            lineChart.config.data.labels = filterDate;
+            lineChart.update();
+            source.close();
+    });
+
+
+
+
+     source.onmessage = function (event) {
+
+            if (config.data.labels.length === 10) {
+                config.data.labels.shift();
+                config.data.datasets[0].data.shift();
+            }
+
+            const data = JSON.parse(event.data);
+
+            if (config.data.labels.includes(data.time) == false ){
+                config.data.labels.push(data.time);
+                config.data.datasets[0].data.push(data.Accounts_created);
+                lineChart.update();
+
+            }
+
+            for (var i = 0; i<config.data.labels.length; i++){
+                label_data = config.data.labels[i]
+                label_data_year = parseInt(label_data.slice(-2))
+                label_data_month = parseInt(label_data.slice(0 , 2))
+                label_data_day = parseInt(label_data.slice(3 , 5))
+                current_year = parseInt(data.time.slice(-2))
+                current_month = parseInt(data.time.slice(0 , 2))
+                current_day = parseInt(data.time.slice(3 , 5))
+                if (current_year < label_data_year){
+                    config.data.labels.pop(label_data);
+                    lineChart.update();
+                }
+
+                else if (current_year == label_data_year){
+                    if (current_month < label_data_month){
+                        config.data.labels.pop(label_data);
+                        lineChart.update();
+                    }
+
+                    else if (current_month == label_data_month){
+                        if (current_day < label_data_day){
+                            config.data.labels.pop(label_data);
+                            lineChart.update();
+                        }
+                    }
+
+                }
+
+            }
+
+     }
+
+</script>
+
+
+{% endblock %}

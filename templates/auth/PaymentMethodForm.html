@@ -1,0 +1,61 @@
+{% extends 'layouts/userbase.html' %}
+{% from "/_formHelper.html" import render_field %}
+{% block title %}
+Edit Payment Method
+{% endblock title %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="static/css/Account/Accountdetails.css">
+
+<div id="Title">
+    {% if userprofile_creditcard == none %}
+    <h2>Add Payment Method</h2>
+    {% else %}
+    <h2>Change Payment Method</h2>
+    {% endif %}
+    <hr>
+</div>
+<br>
+
+<div id="Back">
+    <a href="/PaymentDetails">Back</a>
+</div>
+
+<div id="Form">
+    <form method="post">
+        <div>
+            {{ render_field(form.Cardtype , class="form-control" , id = "cardtype" ) }}
+        </div>
+
+        <div>
+            {{ render_field(form.Cardnumber , class="form-control" , id="cardnumber" , oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ) }}
+        </div>
+
+        <div>
+            {{ render_field(form.Expirationdate , class="form-control" , id="expirationdate" , oninput="this.value = this.value.replace(/[^0-9/]/g, '')" ) }}
+        </div>
+
+        <div>
+            {{ render_field(form.CCV , class="form-control" , id="ccv" , oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" ) }}
+        </div>
+
+        <div>
+             <input type="submit" value="Save changes" class="btn btn-outline-success" id="submit"/>
+        </div>
+
+
+    </form>
+
+    <div>
+        <img src="https://i.ytimg.com/vi/i09C02151PI/maxresdefault.jpg">
+    </div>
+</div>
+
+<script src="/static/js/user/PaymentMethod.js" type="text/javascript"></script>
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}

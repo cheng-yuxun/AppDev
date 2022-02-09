@@ -1,0 +1,142 @@
+div#Title{
+    position:relative;
+    top:100px;
+    width:auto;
+    margin-left:300px;
+}
+
+div#Title h2{
+    font-size:50px;
+}
+
+div#content{
+    position:relative;
+    margin-top:150px;
+    margin-left:300px;
+    padding-bottom:800px;
+    width:auto;
+}
+
+
+div#user{
+    position:absolute;
+    top:200px;
+}
+
+
+div#userbox{
+    float:left;
+    width:460px;
+    overflow:hidden;
+    border:1px solid black;
+    margin-bottom:20px;
+    height:200px;
+}
+
+div#userbox img{
+    width:150px;
+    height:150px;
+    object-fit:cover;
+    border-radius:50%;
+    margin-top:20px;
+    margin-left:10px;
+    border:1px solid black;
+}
+
+div#userbox div#innercontent{
+    position:relative;
+    width:300px;
+    top:-120px;
+    left:180px;
+
+}
+
+div#userbox div#innercontent p{
+    position:relative;
+    text-align-center;
+    font-size:20px;
+    word-wrap:break-word;
+}
+
+
+div#userbox p#status{
+    position:relative;
+    font-size:20px;
+    float:right;
+    top:-250px;
+    right:10px;
+}
+
+
+div#userbox:nth-child(n){
+    margin-right:20px;
+}
+
+
+
+div#content input#searchbar{
+    position:relative;
+    width:300px;
+    padding: 8px;
+    font-size: 17px;
+    border: 1px solid grey;
+    float:right;
+    right:100px;
+}
+
+div#content input#searchbar:focus{
+    outline:none;
+}
+
+div#sortby{
+    position:relative;
+    top:-10px;
+}
+
+
+.filterDiv {
+    display:none;
+}
+
+.show {
+  display: block;
+}
+
+#dateform {
+    position:relative;
+    border:1px solid black;
+    width:300px;
+    margin-bottom:40px;
+    display:none;
+}
+
+a#cross{
+    position:absolute;
+    top:5px;
+    right:15px;
+    opacity: 1;
+}
+
+a#cross:hover{
+    opacity:0.3;
+    cursor:pointer;
+}
+
+#dateform label{
+    margin-left:10px;
+}
+
+#startdate{
+    margin-top:15px;
+}
+
+#enddate{
+    margin-bottom:15px;
+    margin-left:5px;
+}
+
+.container{
+    position:relative;
+    left:-15px;
+
+}

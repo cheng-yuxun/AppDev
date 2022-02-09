@@ -1,0 +1,63 @@
+{% extends 'layouts/base.html' %}
+{% block title %}
+Profile
+{% endblock title %}
+{% block content %}
+{% from "_formHelper.html" import render_field %}
+
+<div class="row">
+    <!-- LHS -->
+    <div class="col-lg-5">
+        <h1>{{ user.get_username() }}</h1>
+    </div>
+    <!-- RHS -->
+    <div class="col-lg-5">
+        <!-- cart -->
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in productcart %}
+                <tr>
+                    <td>
+                        {{ i.get_name() }}
+                    </td>
+                    <td>
+                        {{ i.get_price() }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in eventcart %}
+                <tr>
+                    {% if i.get_category() == 'Onsite' %}
+                    <td>
+                        {{ i.get_name() }}
+                    </td>
+                    <td>
+                        ${{ i.get_price() }}
+                    </td>
+                    {% else %}
+                    <td>
+                        {{ i.get_name() }}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
