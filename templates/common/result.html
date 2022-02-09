@@ -157,16 +157,16 @@ Home
                                                         <h5 class="fw-bolder">{{ other.name }}</h5>
                                                         {% if other.get_category() == 'Onsite' %}
                                                         <p><button class="btn btn-warning"
-                                                                style="width: 100px; height: 35px;">{{
-                                                                other.get_category() }}
-                                                                Event</button>
-                                                        </p>
+                                                                style="width: 100px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_category() }}
+                                                                    Event</p>
+                                                            </button></p>
                                                         {% else %}
                                                         <p><button class="btn btn-info"
-                                                                style="width: 100px; height: 50px;">{{
-                                                                other.get_category() }}
-                                                                Event</button>
-                                                        </p>
+                                                                style="width: 100px; height: 50px;">
+                                                                <p style="font-size: small;">{{ other.get_category() }}
+                                                                    Event</p>
+                                                            </button></p>
                                                         {% endif %}
                                                         <!-- Product price-->
                                                         {{ other.get_date() }}
@@ -239,26 +239,6 @@ Home
     <thead>
         <tr>
             <th style="font-size: 30px;">Products:
-                <div class="btn-group" style="float: right; margin: 0px 110px 0px 0px;">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                        style="width: 100px; height: 40px;">Filter
-                        by
-                    </button>
-                    <div class="dropdown-menu">
-                        <div>
-                            <form action="{{url_for('base.eventfilter')}}" method="POST">
-                                <input type="checkbox" value="Onsite" name="onsitecheck">Onsite
-                                <br>
-                                <input type="checkbox" value="Livestream" name="livestreamcheck">Livestream
-                                <br>
-                                {{ render_field(eventfilter.start_date, class="form-control datepicker") }}
-                                {{ render_field(eventfilter.end_date, class="form-control datepicker") }}
-                                <input type="submit" value="Submit">
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </th>
         </tr>
     </thead>
@@ -286,18 +266,24 @@ Home
                                                     <div class="text-center">
                                                         <!-- Product name-->
                                                         <h5 class="fw-bolder">{{ active.get_name() }}</h5>
-                                                        {% if active.get_ptype() == 'Onsite' %}
+                                                        {% if active.get_ptype() == 'Shirt' %}
                                                         <p><button class="btn btn-warning"
-                                                                style="width: 100px; height: 35px;">
+                                                                style="width: 80px; height: 35px;">
                                                                 <p style="font-size: small;">{{ active.get_ptype() }}
                                                                 </p>
                                                             </button></p>
-                                                        {% else %}
+                                                        {% elif active.get_ptype() == 'Footwear' %}
                                                         <p><button class="btn btn-info"
-                                                                style="width: 100px; height: 50px;">
+                                                                style="width: 80px; height: 35px;">
                                                                 <p style="font-size: small;">{{ active.get_ptype() }}
                                                                 </p>
                                                             </button></p>
+                                                        {% elif active.get_ptype() == 'Pants' %}
+                                                        <p><button class="btn btn-success"
+                                                            style="width: 80px; height: 35px;">
+                                                            <p style="font-size: small;">{{ active.get_ptype() }}
+                                                            </p>
+                                                        </button></p>
                                                         {% endif %}
                                                         <!-- Product price-->
                                                         {{ active.get_price() }}
@@ -364,14 +350,22 @@ Home
                                                         <h5 class="fw-bolder">{{ other.get_name() }}</h5>
                                                         {% if other.get_ptype() == 'Shirt' %}
                                                         <p><button class="btn btn-warning"
-                                                                style="width: 100px; height: 35px;">{{
-                                                                other.get_ptype() }}</button>
-                                                        </p>
-                                                        {% else %}
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif other.get_ptype() == 'Footwear' %}
                                                         <p><button class="btn btn-info"
-                                                                style="width: 100px; height: 50px;">{{
-                                                                other.get_ptype() }}</button>
-                                                        </p>
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif other.get_ptype() == 'Pants' %}
+                                                        <p><button class="btn btn-success"
+                                                            style="width: 80px; height: 35px;">
+                                                            <p style="font-size: small;">{{ other.get_ptype() }}
+                                                            </p>
+                                                        </button></p>
                                                         {% endif %}
                                                         <!-- Product price-->
                                                         {{ other.get_price() }}
