@@ -593,8 +593,12 @@ def RemovingFriend(id):
 
 @endpoint.route('/UserDetails')
 def UserDetails():
+    user_dict = {}
     dbuser = shelve.open(get_db() , 'r')
-    user_dict = dbuser['Users']
+    if 'Users' in dbuser:
+        user_dict = dbuser['Users']
+    else:
+        dbuser['Users'] = user_dict
     return render_template("/admin/users/UserDetails.html" , user_dict=user_dict  )
 
 
@@ -675,9 +679,9 @@ def PopularityGraph():
 
 @endpoint.route('/generate_graph')
 def generate_graph():
+    db = shelve.open(get_db() , 'w')
     def generator():
         while True:
-            db = shelve.open(get_db() , 'w')
             Accounts_created_dict = db['Accounts_created']
             if datetime.now().strftime('%m/%d/%y') in Accounts_created_dict:
                 pass

@@ -9,15 +9,7 @@ Account Details
 
 <link rel="stylesheet" type="text/css" href="static/css/Account/Accountdetails.css">
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes id="flashes">
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
+
 
 <div id="Title">
     <h2>{{ userprofile_name }}'s Account</h2>
@@ -83,9 +75,6 @@ Account Details
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
-    if ($('#flashes').length){
-        $("#flashes").delay(5000).slideUp(300);
-    }
 
      $(".sidelinks").each(function() {
         if (this.href == window.location.href) {
