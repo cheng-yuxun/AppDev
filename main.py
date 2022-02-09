@@ -2,7 +2,6 @@ from flask import Flask
 from flask_mail import Mail
 from datetime import timedelta
 
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'abcd'
 app.config['PERMANENT_SESSION_LIFETIME'] =  timedelta(minutes=30)

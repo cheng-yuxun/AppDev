@@ -30,6 +30,8 @@ class Product:
         return self.__comments
 
     def get_status(self):
+        if self.__stock == 0:
+            self.__status = 'Unavailable'
         return self.__status
 
     def get_stock(self):

@@ -72,7 +72,11 @@ def events():
                         else:
                             filter(events)
                 else:
-                    filter(events)
+                    if eventfilter.status.data != '':
+                            if events.get_status() == eventfilter.status.data:
+                                filter(events)
+                    else:
+                        filter(events)
 
         print(events_list)
     return render_template(

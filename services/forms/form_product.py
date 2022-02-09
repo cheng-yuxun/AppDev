@@ -5,9 +5,9 @@ from flask_wtf.file import FileAllowed, FileField, FileRequired
 class CreateProductForm(Form):
     name = StringField('Product Name', [validators.Length(min=1, max=150), validators.DataRequired()])
     ptype = RadioField('Product Type', choices=[('Shirt', 'Shirt'), ('Footwear', 'Footwear'), ('Pants', 'Pants')], default='O')
-    price = StringField('Product Price',[validators.Length(min=1, max=150), validators.DataRequired()], default='$')
+    price = IntegerField('Product Price',[validators.NumberRange(min=1, max=999999999), validators.DataRequired()])
     comments = TextAreaField('Comments', [validators.Optional()])
-    stock = StringField('Amount of Stock', [validators.Length(min=1, max=150), validators.DataRequired()])
+    stock = IntegerField('Amount of Stock', [validators.NumberRange(min=1, max=999999999), validators.DataRequired()])
     image = FileField(
         "Image",
         validators=[

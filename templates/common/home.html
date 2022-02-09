@@ -256,7 +256,7 @@ Home
             <td>
                 {% if product_active_keys|length != 0 %}
                 <!-- events carousel -->
-                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" data-interval="false">
+                <div id="carouselProductControls" class="carousel slide" data-ride="carousel" data-interval="false">
                     <div class="d-flex justify-content-center">
                         <div class="col-lg-8">
                             <div class="carousel-inner">
@@ -357,22 +357,22 @@ Home
                                                     <div class="text-center">
                                                         <!-- Product name-->
                                                         <h5 class="fw-bolder">{{ other.get_name() }}</h5>
-                                                        {% if active.get_ptype() == 'Shirt' %}
+                                                        {% if other.get_ptype() == 'Shirt' %}
                                                         <p><button class="btn btn-warning"
                                                                 style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
                                                                 </p>
                                                             </button></p>
-                                                        {% elif active.get_ptype() == 'Footwear' %}
+                                                        {% elif other.get_ptype() == 'Footwear' %}
                                                         <p><button class="btn btn-info"
                                                                 style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
                                                                 </p>
                                                             </button></p>
-                                                        {% elif active.get_ptype() == 'Pants' %}
+                                                        {% elif other.get_ptype() == 'Pants' %}
                                                         <p><button class="btn btn-success"
                                                             style="width: 80px; height: 35px;">
-                                                            <p style="font-size: small;">{{ active.get_ptype() }}
+                                                            <p style="font-size: small;">{{ other.get_ptype() }}
                                                             </p>
                                                         </button></p>
                                                         {% endif %}
@@ -427,11 +427,11 @@ Home
                             </div>
                         </div>
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <a class="carousel-control-prev" href="#carouselProductControls" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">Previous</span>
                     </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <a class="carousel-control-next" href="#carouselProductControls" role="button" data-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                         <span class="sr-only">Next</span>
                     </a>

@@ -1,4 +1,5 @@
 from cmath import log
+from itertools import product
 from flask import Blueprint, render_template, redirect, request, url_for, flash , Flask , Response , session
 import shelve
 import os.path
@@ -26,20 +27,29 @@ def home_page():
     db = shelve.open(get_db(), flag="c")
     events_dict: dict = db["Events"]
     products_dict: dict = db["Products"]
+    sesh = db['current_session']
+    cart = {}
+    try:
+        user_id = sesh['user_id']
+        user_dict: dict = db['Users']
+        user = user_dict.get(user_id)
+        cart: dict = user.getcart()
+    except:
+        pass
     db.close()
     events_list = []
     products_list = []
     eventfilter = EventFilter(request.form)
     if request.method == "GET":
         searchform = Search(request.form)
-
         for key in events_dict:
             events = events_dict.get(key)
-            if events.get_status() == "Active":
+            if events.get_status() == "Active" and events.get_uuid() not in cart:
                 events_list.append(events)
         for key in products_dict:
             products = products_dict.get(key)
-            products_list.append(products)
+            if products.get_status() == 'Available' and products.get_product_id() not in cart:
+                products_list.append(products)
     if request.method == "POST":
         searchform = Search(request.form)
         if searchform.search.data == "":
@@ -53,12 +63,12 @@ def home_page():
                 events = events_dict.get(key)
                 if (
                     query == events.get_name().upper().replace(" ", "")
-                    and events.get_status() == "Active"
+                    and events.get_status() == "Active" and events.get_uuid() not in user.getcart()
                 ):
                     events_list.append(events)
             for key in products_dict:
                 products = products_dict.get(key)
-                if query == products.get_name().upper().replace(" ", ""):
+                if query == products.get_name().upper().replace(" ", "") and products.get_status() == 'Available' and products.get_product_id() not in user.getcart():
                     products_list.append(products)
     try:
         event_active_keys: list = events_list[0:4]
@@ -385,7 +395,6 @@ def LoginPage(error=None , expirytime=None , oldpassword=None , forgetful_user=N
 
 
 
-
 @endpoint.route('/generate_time')
 def generate_time():
     def generator():
@@ -396,14 +405,6 @@ def generate_time():
             time.sleep(1)
 
     return Response(generator(), mimetype='text/event-stream')
-
-
-
-
-
-
-
-
 
 
 @endpoint.route("/events_detail/<id>/", methods=["GET", "POST"])
@@ -427,23 +428,15 @@ def events_details(id):
 def products_details(id):
     db = shelve.open(get_db(), "r")
     products_dict: dict = db["Products"]
-    current_sesh: dict = db["current_session"]
     db.close()
-    try:
-        for key in current_sesh:
-            user_id = current_sesh.get(key)
-        print(user_id.getcart())
-    except:
-        user_id = ""
     products_id = products_dict.get(id)
-    print(f"--- Retrieving Event Key {products_id.get_product_id()} Data ---")
+    print(f"--- Retrieving Product Key {products_id.get_product_id()} Data ---")
     searchform = Search(request.form)
     if request.method == "POST":
         return redirect(url_for("base.home_page"), code=307)
     return render_template(
         "common/products_detail.html",
         products_id=products_id,
-        user_id=user_id,
         searchform=searchform,
     )
 
@@ -470,6 +463,10 @@ def addcart(id):
             products_id = products_dict.get(id)
             user.addcart(products_id.get_product_id(), products_id)
             print(f"user{user.get_username()} ordered {user.getcart()}")
+            stonk = products_id.get_stock() - 1
+            print(products_id.get_stock())
+            print(stonk)
+            products_id.set_stock(stonk)
             ticket = products_id.get_sold() + 1
             products_id.set_sold(ticket)
             products_id.add_user(ticket, user.get_username())
@@ -479,7 +476,7 @@ def addcart(id):
         db["Users"] = user_dict
     except:
         flash("Pls Sign Up or Log In", category="error")
-        return redirect(url_for('base.events_details', id=id))
+        return redirect(url_for('base.home_page'))
     db.close()
     return redirect(url_for('base.home_page'))
 
@@ -491,12 +488,21 @@ def eventfilter():
     db = shelve.open(get_db(), "r")
     events_dict: dict = db["Events"]
     products_dict: dict = db['Products']
+    sesh = db['current_session']
+    cart = {}
+    try:
+        user_id = sesh['user_id']
+        user_dict: dict = db['Users']
+        user = user_dict.get(user_id)
+        cart: dict = user.getcart()
+    except:
+        pass
     db.close()
     events_list = []
     products_list = []
     
     def filter(events):
-        if events not in events_list:
+        if events not in events_list and events not in cart:
             events_list.append(events)
 
     for key in events_dict:
