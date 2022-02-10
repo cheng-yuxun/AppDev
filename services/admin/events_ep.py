@@ -295,9 +295,10 @@ def eventstxt(id):
         events_dict: dict = db["Events"]
         db.close()
         events_id = events_dict.get(id)
-        lines = [f"event name: {events_id.name}"]
+        new_line = '\n'
+        lines = [f"Event name: {events_id.name}{new_line}Date: {events_id.date}{new_line}Time: {events_id.start_time}-{events_id.end_time}{new_line}Participants: {events_id.user}"]
         return Response(
             lines,
             mimetype="text/plain",
-            headers={"Content-Disposition": "attachment; filename=test.txt"},
+            headers={"Content-Disposition": "attachment; filename=event.txt"},
         )
