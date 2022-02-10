@@ -176,5 +176,5 @@ class Livestream(Events):
         if start <= current_date <= end:
             self.status = 'Ongoing'
         elif current_date > end:
-            self.status = 'Invalid'
+            self.status = 'Expired'
         return self.status

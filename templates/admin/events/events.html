@@ -58,25 +58,26 @@ Event Frontpage
     <div class="card-body">
         <div class="d-flex justify-content-end">
             <div class="dropdown">
-                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Filter by
+                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter by
                 </a>
-              
+
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li>
-                    <form action="{{url_for('events.events')}}" method="POST">
-                        <input type="checkbox" value="Onsite" name="onsitecheck">Onsite
-                        <br>
-                        <input type="checkbox" value="Livestream" name="livestreamcheck">Livestream
-                        <br>
-                        {{ render_field(eventfilter.status, class="form-control")}}
-                        {{ render_field(eventfilter.start_date, class="form-control datepicker") }}
-                        {{ render_field(eventfilter.end_date, class="form-control datepicker") }}
-                        <input type="submit" value="Submit">
-                    </form>
-                  </li>
+                    <li>
+                        <form action="{{url_for('events.events')}}" method="POST">
+                            <input type="checkbox" value="Onsite" name="onsitecheck">Onsite
+                            <br>
+                            <input type="checkbox" value="Livestream" name="livestreamcheck">Livestream
+                            <br>
+                            {{ render_field(eventfilter.status, class="form-control")}}
+                            {{ render_field(eventfilter.start_date, class="form-control datepicker") }}
+                            {{ render_field(eventfilter.end_date, class="form-control datepicker") }}
+                            <input type="submit" value="Submit">
+                        </form>
+                    </li>
                 </ul>
-              </div>
+            </div>
             <input type="text" style="margin-right: 5px;" id="myInput" onkeyup="myFunction()"
                 placeholder="Search for events..">
 
@@ -161,6 +162,10 @@ Event Frontpage
                             <button class="btn btn-danger">{{ events.get_status() }}</button>
                         </form>
                     </td>
+                    {% elif events.get_status() == 'Ongoing' %}
+                    <td>
+                        <button class="btn btn-warning">{{ events.get_status() }}</button>
+                    </td>
                     {% elif events.get_status() == 'Expired' %}
                     <td>
                         <button class="btn btn-secondary">{{ events.get_status() }}</button>
@@ -225,8 +230,12 @@ Event Frontpage
             if (distance < 0) {
                 clearInterval(x);
                 document.getElementById("event_timer{{ events.get_uuid() }}").innerHTML = "-";
+                if (-1000 < distance) {
+                    document.location.reload(true)
+                }
             }
         }, 1000);
+
         console.log(countDownDate)
     });
 </script>

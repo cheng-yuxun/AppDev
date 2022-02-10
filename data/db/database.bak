@@ -2,7 +2,7 @@
 'Inventory', (512, 6)
 'current_session', (1024, 32)
 'Rewards', (1536, 465)
-'Events', (9728, 1245)
+'Events', (18432, 1787)
 'points', (2560, 6)
 'Users', (15872, 2351)
 'Products', (8704, 463)
