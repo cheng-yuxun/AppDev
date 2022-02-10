@@ -463,11 +463,10 @@ def addcart(id):
             products_id = products_dict.get(id)
             user.addcart(products_id.get_product_id(), products_id)
             print(f"user{user.get_username()} ordered {user.getcart()}")
-            stonk = products_id.get_stock() - 1
-            print(products_id.get_stock())
-            print(stonk)
+            quantity = request.data.decode('UTF-8')
+            stonk = products_id.get_stock() - quantity
             products_id.set_stock(stonk)
-            ticket = products_id.get_sold() + 1
+            ticket = products_id.get_sold() + quantity
             products_id.set_sold(ticket)
             products_id.add_user(ticket, user.get_username())
             flash(f"{products_id.get_name()} has been successfully added to cart", category='success')
@@ -580,3 +579,8 @@ def cart():
     searchform=searchform,
     eventcart=eventcart,
     productcart=productcart)
+
+@endpoint.route('/quantity', methods=['GET', 'POST'])
+def quantity():
+    quantity = request.data.decode('UTF-8')
+    return redirect(url_for('base.home_page'))
