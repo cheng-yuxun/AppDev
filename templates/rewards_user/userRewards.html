@@ -4,19 +4,76 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>Rewards Redemption</title>
+        <link rel="stylesheet" href="/static/css/Navbar/navbar.css">
+
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/Details.css') }}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
     </head>
-    <body class="sb-nav-fixed">
-        <div class="clientDetails">
-            <div class="custPoints">Points available: {{points}}</div>
+
+    <nav class="navbar navbar-main navbar-expand-lg navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Logo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="d-flex justify-content-start">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+
+
+                    {% if session['loggedin'] == 'user' %}
+                    <li id="dropdown">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-light"><i class="bi bi-person"></i> {{
+                                session['username'] }}</button>
+                            <button type="button"
+                                class="btn btn-outline-light dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/Profile">My Profile</a>
+                                <a class="dropdown-item" href="/AccountDetails">Account details</a>
+                                <a class="dropdown-item" href="/rewards_ava">Redeem Rewards</a>
+                                <a class="dropdown-item" href="/cart"><i class="bi-cart-fill me-1"></i>Purchase History</a>
+                                <a class="dropdown-item" href="/Friends">Friends</a>
+                                <a class="dropdown-item" href="/signout">Logout</a>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    </li>
+                    {% endif %}
+
+                    {% if not session['loggedin'] %}
+                    <li class="nav-item"><a class="nav-link" href="#loginModal" data-bs-target="#loginModal"
+                            data-bs-toggle="modal" onclick="window.location.href = '/LoginPage'" >Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('auth.sign_up')}}">Sign Up</a></li>
+
+                    {% endif %}
+
+                </ul>
+            </div>
         </div>
-        <button id="myCouponsBtn" class="btn btn-info">My Coupons</button>
+    </div>
+</nav>
+    <body class="sb-nav-fixed">
+        <div class="clientDetails" style="position:relative; top: -30">
+            <h1 style="margin:0 750; top:60; position:relative; width: 1500">Rewards Redemption</h1>
+
+            <div class="custPoints">Points available: {{points}}</div>
+
+            <button id="myCouponsBtn" class="btn btn-info">My Coupons</button>
+        </div>
+
+
         <!-- The Modal -->
         <div id="myModal" class="modal">
             <!--Tab start-->
@@ -27,7 +84,7 @@
                 <button class="modaltablinks" onclick="openModalTab(event, 'history')">HISTORY</button>
             </div>
             <!-- Modal content -->
-            <div class="modal-content" id="valid">
+            <div class="modal-content" id="valid" style="overflow:scroll;">
                 <div class="box">
 
                     {% if rewards_list|length > 0 %}
@@ -35,7 +92,7 @@
 
                             {% if rewards.get_status() == 'Available' and today < rewards.get_date_expire() and today >= rewards.get_date_start() %}
 
-                                    <p>{{ rewards.get_name() }}<br> Number of redemption: {{rewards.get_redemption()}}
+                                    <p>{{ rewards.get_name() }}
                                         <br>Expiry date: {{ rewards.get_date_expire() }}</p>
 
                             {% endif %}
@@ -47,7 +104,7 @@
                 </div>
             </div>
 
-            <div class="modal-content" id="expired">
+            <div class="modal-content" id="expired" style="overflow:scroll;">
                 <div class="box">
                     {% if rewards_list|length > 0 %}
 
@@ -63,7 +120,7 @@
                 </div>
             </div>
 
-            <div class="modal-content" id="history">
+            <div class="modal-content" id="history" style="overflow:scroll;">
                 <div class="box">
                     {% if history_list|length > 0 %}
 
@@ -81,8 +138,8 @@
 
 
         <!--All-->
-        <div class="rewards_showcase" id="all">
-            <div class="tab">
+        <div class="rewards_showcase" id="all" style="position:relative; top: -60">
+            <div class="tab1">
                 <button class="tablinks" onclick="openTab(event, 'all')" id="defaultOpen">ALL</button>
                 <button class="tablinks" onclick="openTab(event, 'redeemable')">REDEEMABLE</button>
                 <button class="tablinks" onclick="openTab(event, 'availableSoon')">AVAILABLE SOON</button>
@@ -91,7 +148,7 @@
 
             {% for rewards in rewards_list %}
             {% if rewards.get_status() == 'Available' and today < rewards.get_date_expire() %}
-            <div class="card" style="width: 18rem; margin: 0 70 60;">
+            <div class="card" style="width: 18rem; margin: 20 70 60;">
                 <div class="card-body" style="padding:30">
                     <h5 style="margin: 0 0 30">{{ rewards.get_name() }}</h5>
                     <p class="card-text" style="margin:0 0 20">
@@ -115,8 +172,8 @@
         </div>
         <!--All end-->
         <!--Redeemable-->
-        <div class="rewards_showcase" id="redeemable">
-            <div class="tab">
+        <div class="rewards_showcase" id="redeemable" style="position:relative; top: -60">
+            <div class="tab1">
                 <button class="tablinks" onclick="openTab(event, 'all')" id="defaultOpen">ALL</button>
                 <button class="tablinks" onclick="openTab(event, 'redeemable')">REDEEMABLE</button>
                 <button class="tablinks" onclick="openTab(event, 'availableSoon')">AVAILABLE SOON</button>
@@ -125,7 +182,7 @@
 
             {% for rewards in rewards_list %}
             {% if rewards.get_status() == 'Available' and today < rewards.get_date_expire() and today >= rewards.get_date_start() %}
-            <div class="card" style="width: 18rem; margin: 0 70 60;">
+            <div class="card" style="width: 18rem; margin: 20 70 60;">
                 <div class="card-body" style="padding:30">
                     <h5 style="margin: 0 0 30">{{ rewards.get_name() }}</h5>
                     <p class="card-text" style="margin:0 0 20">
@@ -149,8 +206,8 @@
         </div>
         <!--Redeemable end-->
         <!--Available soon-->
-        <div class="rewards_showcase" id="availableSoon">
-            <div class="tab">
+        <div class="rewards_showcase" id="availableSoon" style="position:relative; top: -60">
+            <div class="tab1">
                 <button class="tablinks" onclick="openTab(event, 'all')" id="defaultOpen">ALL</button>
                 <button class="tablinks" onclick="openTab(event, 'redeemable')">REDEEMABLE</button>
                 <button class="tablinks" onclick="openTab(event, 'availableSoon')">AVAILABLE SOON</button>
@@ -159,7 +216,7 @@
         <!--DISPLAY IF CURRENT DATE IS BEFORE START DATE AND EXPIRY DATE-->
             {% for rewards in rewards_list %}
             {% if rewards.get_status() == 'Available' and today < rewards.get_date_expire() and today < rewards.get_date_start() %}
-            <div class="card" style="width: 18rem; margin: 0 70 60;">
+            <div class="card" style="width: 18rem; margin: 20 70 60;">
                 <div class="card-body" style="padding:30">
                     <h5 style="margin: 0 0 30">{{ rewards.get_name() }}</h5>
                     <p class="card-text" style="margin:0 0 20">
@@ -241,6 +298,21 @@
         document.getElementById("defaultOpen").click();
 
     </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="/static/js/user/scripts.js"></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiWhsUUguuj8luoSy4zCrfeKBO8QKpadg&callback=initMap">
+        </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
     </body>
 </html>
 

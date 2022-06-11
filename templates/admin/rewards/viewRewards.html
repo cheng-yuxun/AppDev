@@ -1,8 +1,11 @@
 {% extends "layouts/admin_base.html" %}
+{% block title %}
+Rewards
+{% endblock title %}
 {% block content %}
+{% from "_formHelper.html" import render_field %}
 
-
-<h1 class="display-4">Rewards</h1>
+<h1 class="display-45">Rewards</h1>
 <div>
   {% if count == 0 %}
   <p>There are no rewards.</p>
@@ -12,8 +15,9 @@
   <p>There are {{ count }} rewards.</p>
   {% endif %}
 </div>
-<div>
+
   <table class="table table-striped" id="datatablesSimple">
+
     <thead>
       <tr>
         <th>Rewards ID</th>
@@ -27,9 +31,10 @@
       </tr>
     </thead>
     <tbody>
+
     {% for rewards in rewards_list %}
       <tr>
-        <td>{{ rewards.get_uuid() }}</td>
+        <td>{{ rewards.get_uuid() }}<img src="{{url_for('static', filename='assets/img/' + rewards.get_picture())}}" style="width: 50px;height:50px; position:relative; margin-left:20% "/></td>
         <td>{{ rewards.get_name() }}</td>
         <td>{{ rewards.get_points() }}</td>
         <td>{{ rewards.get_category() }}</td>
@@ -76,20 +81,26 @@
               {% if rewards.get_status() == 'Available' %}
             <p>
             <form action="{{url_for('rewards.availability', id=rewards.get_uuid())}}" method="POST">
-                <button class="btn btn-success" style="margin: -16 -3; border-color: rgb(255 255 255)">{{ rewards.get_status() }}</button>
+                <button class="btn btn-success" style="margin-top:-15%;position:relative; border-color: rgb(255 255 255)">{{ rewards.get_status() }}</button>
             </form>
             {% else %}
             <p>
             <form action="{{url_for('rewards.availability', id=rewards.get_uuid())}}" id="rewards.get_uuid()"
                 method="POST">
-                <button class="btn btn-danger" style="margin: -16 -3; border-color: rgb(255 255 255)">{{ rewards.get_status() }}</button>
+                <button class="btn btn-danger" style="margin-top:-13%;position:relative; border-color: rgb(255 255 255)">{{ rewards.get_status() }}</button>
             </form>
             {% endif %}
           </td>
       </tr>
     {% endfor %}
     </tbody>
+    <a href="/admin/create_rewards">
+        <button class="btn btn-primary" style="position:relative; left: 78%; bottom: -37px">
+            + Add Rewards
+       </button>
+    </a >
   </table>
+
 </div>
 
 
@@ -98,6 +109,8 @@
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script type=text/javascript src="{{
   url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
+
+
 
 
 {% endblock %}

@@ -13,6 +13,7 @@ class Rewards(Parent):
         self.__description = description
         self.__picture = picture
 
+
     def set_picture(self,picture):
         self.__picture = picture
 
@@ -62,9 +63,16 @@ class History:
     def __init__(self,description, expiryDate):
         self.__description = description
         self.__expiryDate = expiryDate
+        self.quantity = 0
 
     def set_description(self,description):
         self.__description  = description
+
+    def add_quantity(self , quantity):
+        self.quantity += quantity
+
+    def get_quantity(self):
+        return self.quantity
 
     def get_description(self):
         return  self.__description

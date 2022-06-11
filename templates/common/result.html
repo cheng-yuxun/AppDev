@@ -25,12 +25,12 @@ Home
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With your mom</p>
+            <p class="lead fw-normal text-white-50 mb-0">With your family</p>
         </div>
     </div>
 </header>
 
-
+{% if e == 'yes' %}
 <table class="table table-borderless">
     <thead>
         <tr>
@@ -234,11 +234,33 @@ Home
         </tr>
     </tbody>
 </table>
+{% endif %}
 
+{% if p == 'yes' %}
 <table class="table table-borderless">
     <thead>
         <tr>
             <th style="font-size: 30px;">Products:
+                <div class="btn-group" style="float: right; margin: 0px 110px 0px 0px;">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="width: 100px; height: 40px;">Filter
+                        by
+                    </button>
+                    <div class="dropdown-menu">
+                        <div>
+                            <form action="{{url_for('base.productfilter')}}" method="POST">
+                                <input type="checkbox" value="Shirt" name="shirtcheck">Shirt
+                                <br>
+                                <input type="checkbox" value="Footwear" name="footwearcheck">Footwear
+                                <br>
+                                <input type="checkbox" value="Pants" name="pantscheck">Pants
+                                <br>
+                                <input type="submit" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </th>
         </tr>
     </thead>
@@ -280,10 +302,10 @@ Home
                                                             </button></p>
                                                         {% elif active.get_ptype() == 'Pants' %}
                                                         <p><button class="btn btn-success"
-                                                            style="width: 80px; height: 35px;">
-                                                            <p style="font-size: small;">{{ active.get_ptype() }}
-                                                            </p>
-                                                        </button></p>
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
                                                         {% endif %}
                                                         <!-- Product price-->
                                                         {{ active.get_price() }}
@@ -362,10 +384,10 @@ Home
                                                             </button></p>
                                                         {% elif other.get_ptype() == 'Pants' %}
                                                         <p><button class="btn btn-success"
-                                                            style="width: 80px; height: 35px;">
-                                                            <p style="font-size: small;">{{ other.get_ptype() }}
-                                                            </p>
-                                                        </button></p>
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
                                                         {% endif %}
                                                         <!-- Product price-->
                                                         {{ other.get_price() }}
@@ -436,5 +458,6 @@ Home
         </tr>
     </tbody>
 </table>
+{% endif %}
 
 {% endblock %}

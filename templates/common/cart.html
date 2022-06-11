@@ -1,63 +1,554 @@
+<!-- cart html -->
 {% extends 'layouts/base.html' %}
 {% block title %}
-Profile
+Purchase History
 {% endblock title %}
 {% block content %}
 {% from "_formHelper.html" import render_field %}
 
-<div class="row">
-    <!-- LHS -->
-    <div class="col-lg-5">
-        <h1>{{ user.get_username() }}</h1>
-    </div>
-    <!-- RHS -->
-    <div class="col-lg-5">
-        <!-- cart -->
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in productcart %}
-                <tr>
-                    <td>
-                        {{ i.get_name() }}
-                    </td>
-                    <td>
-                        {{ i.get_price() }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Event</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in eventcart %}
-                <tr>
-                    {% if i.get_category() == 'Onsite' %}
-                    <td>
-                        {{ i.get_name() }}
-                    </td>
-                    <td>
-                        ${{ i.get_price() }}
-                    </td>
+<div class="p-2">
+    <h1 style="margin-left: 260px;"><i class="bi-cart-fill me-1"></i>Purchase History</h1>
+    <div class="d-flex justify-content-center">
+        <div class="col-lg-7">
+            <!-- cart -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if total != 0 %}
+
+                    {% for i in p_cart %}
+                    <tr>
+                        <td>
+                            <a href="#" data-bs-toggle="modal"
+                                data-bs-target="#myModal{{ p_cart[i][0].get_product_id() }}" style="color: black;">
+                                {{ p_cart[i][0].get_name() }}</a>
+                        </td>
+                        <td>
+                            {{ p_cart[i][1] }}
+                        </td>
+                        <td>
+                            ${{ p_cart[i][0].get_price() }}
+                        </td>
+                    </tr>
+                    {% endfor %}
                     {% else %}
-                    <td>
-                        {{ i.get_name() }}
-                    </td>
+                    <tr>
+                        <td colspan="3">
+                            No Products
+                        </td>
+                    </tr>
                     {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    <tr>
+                        <td colspan="3">Total: S${{ total }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Event</th>
+                        <th>Price</th>
+                        <th>Countdown</th>
+                        <th>Link</th>
+                        <th>Cancel</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% if event_list|length > 0 %}
+                    <tr>
+                        <td colspan="5"><strong>Ongoing Event</strong></td>
+                    </tr>
+                    {% for i in eventcart %}
+                    <tr>
+                        <td>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#myModal{{ i.get_uuid() }}"
+                                style="color: black;">{{ i.get_name() }}</a>
+                        </td>
+                        {% if i.get_category() == 'Onsite' %}
+                        <td>
+                            S${{ i.get_price() }}
+                        </td>
+                        <td class=" d-flex justify-content-center">
+                            <p id="event_timer{{ i.get_uuid() }}"></p>
+                        </td>
+                        <td> - </td>
+                        {% else %}
+                        <td> - </td>
+                        <td class=" d-flex justify-content-center">
+                            <p id="event_timer{{ i.get_uuid() }}"></p>
+                        </td>
+                        <td>
+                            <a href="#">{{ i.get_link() }}</a>
+                        </td>
+                        {% endif %}
+                        {% if i.get_oneday() == False %}
+                        <td class="d-flex justify-content-center">
+                            <form action="{{url_for('base.cancelevent', id=i.get_uuid())}}" method="POST">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#cancelModal_{{i.get_uuid()}}"><i
+                                        class="bi bi-trash"></i>Cancel</button>
+                                <div class="modal" id="cancelModal_{{i.get_uuid()}}">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Confirm Cancellation?</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to cancel your reservation for
+                                                    {{i.get_name()}}?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <input type="submit" value="Confirm" class="btn btn-primary">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        {% else %}
+                        <td class="d-flex justify-content-center">
+                            -
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="5"><strong>Event History</strong></td>
+                    </tr>
+                    {% for i in eventhistory %}
+                    <tr>
+                        <td>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#myModal{{ i.get_uuid() }}"
+                                style="color: black;">{{ i.get_name() }}</a>
+                        </td>
+                        {% if i.get_category() == 'Onsite' %}
+                        <td>
+                            S${{ i.get_price() }}
+                        </td>
+                        <td class=" d-flex justify-content-center">
+                            -
+                        </td>
+                        <td> - </td>
+                        {% else %}
+                        <td> - </td>
+                        <td class=" d-flex justify-content-center">
+                            -
+                        </td>
+                        <td>
+                            <a href="#">{{ i.get_link() }}</a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5">
+                            No Participated Events
+                        </td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td colspan="5">
+                            Total:
+                            S${{ eventotal }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="bg-primary text-light p-2">
+                <strong>Event Cancellation Details</strong>
+                <br>
+                You can cancel your reservation up to 24 hours before the activity gets started
+            </div>
+
+        </div>
     </div>
 </div>
+
+{% for i in eventcart %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const countDownDate = new Date("{{ i.get_timer() }}").getTime();
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            document.getElementById("event_timer{{ i.get_uuid() }}").innerHTML = days + "d " + hours + "h "
+                + minutes + "m " + seconds + "s ";
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("event_timer{{ i.get_uuid() }}").innerHTML = "Ongoing";
+
+            }
+        }, 1000);
+
+        console.log(countDownDate)
+    });
+</script>
+<div class="modal fade" id="myModal{{ i.get_uuid() }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ i.get_name() }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <img src="{{url_for('static', filename='media/event_img/' + i.get_uuid() + '.png')}}"
+                        class="card-img-top img-fluid" alt="event image" style="width: 320px; height: 180px;">
+                </div>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <td>Description:</td>
+                            <td>{{ i.get_desc() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date:</td>
+                            <td>{{ i.get_date() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Time:</td>
+                            <td>{{ i.get_start_time() }} - {{ i.get_end_time() }}</td>
+                        </tr>
+                        {% if i.get_category() == 'Onsite' %}
+                        <tr>
+                            <td>Price:</td>
+                            <td>S${{ i.get_price() }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Location:</td>
+                            <td>{{ i.get_location() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td>{{ i.get_address() }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>Link:</td>
+                            <td>{{ i.get_link() }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                {% if i.get_category() == 'Onsite' %}
+                <div class="d-flex justify-content-center">
+                    <div id="map" style="height:180px; width:100%; margin: 0px 10px 15px 0px;"></div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% if i.get_category() == 'Onsite' %}
+{% if i.get_location() == 'Decathlon SGLab' %}
+<script>
+
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.30425, lng: 103.88239 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.30425, lng: 103.88239 },
+                content: '230 Stadium Blvd, Singapore 397799'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% else %}
+<script>
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.32292, lng: 103.92240 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.32293, lng: 103.92240 },
+                content: '750A Chai Chee Rd, #01-01 ESR BizPark @Chai Chee, Singapore 469001'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% endif %}
+{% endif %}
+{% endfor %}
+
+{% for i in p_cart %}
+<div class="modal fade" id="myModal{{ p_cart[i][0].get_product_id() }}" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                {% if p_cart[i][0].get_stock() > 0 %}
+                <h5 class="modal-title" id="exampleModalLabel"><a style="color: black;"
+                        href="products_detail/{{p_cart[i][0].get_product_id()}}">{{ p_cart[i][0].get_name() }}</a></h5>
+                {% else %}
+                <h5 class="modal-title" id="exampleModalLabel">{{ p_cart[i][0].get_name() }}</h5>
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <img src="{{url_for('static', filename='media/img_prod/' + p_cart[i][0].get_product_id() + '.png')}}"
+                        class="card-img-top img-fluid" alt="event image" style="width: 320px; height: 180px;">
+                </div>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <td>Description:</td>
+                            <td>{{ p_cart[i][0].get_comments() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Type:</td>
+                            <td>{{ p_cart[i][0].get_ptype() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Price:</td>
+                            <td>${{ p_cart[i][0].get_price() }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% for i in eventhistory %}
+
+<div class="modal fade" id="myModal{{ i.get_uuid() }}" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{{ i.get_name() }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <img src="{{url_for('static', filename='media/event_img/' + i.get_uuid() + '.png')}}"
+                        class="card-img-top img-fluid" alt="event image" style="width: 320px; height: 180px;">
+                </div>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <td>Description:</td>
+                            <td>{{ i.get_desc() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date:</td>
+                            <td>{{ i.get_date() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Time:</td>
+                            <td>{{ i.get_start_time() }} - {{ i.get_end_time() }}</td>
+                        </tr>
+                        {% if i.get_category() == 'Onsite' %}
+                        <tr>
+                            <td>Price:</td>
+                            <td>S${{ i.get_price() }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Location:</td>
+                            <td>{{ i.get_location() }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address:</td>
+                            <td>{{ i.get_address() }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td>Link:</td>
+                            <td>{{ i.get_link() }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                {% if i.get_category() == 'Onsite' %}
+                <div class="d-flex justify-content-center">
+                    <div id="map" style="height:180px; width:100%; margin: 0px 10px 15px 0px;"></div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% if i.get_category() == 'Onsite' %}
+{% if i.get_location() == 'Decathlon SGLab' %}
+<script>
+
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.30425, lng: 103.88239 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.30425, lng: 103.88239 },
+                content: '230 Stadium Blvd, Singapore 397799'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% else %}
+<script>
+    function initMap() {
+        // map options
+        var options = {
+            zoom: 18,
+            center: { lat: 1.32292, lng: 103.92240 }
+        }
+
+        // new map
+        var map = new
+            google.maps.Map(document.getElementById('map'), options);
+
+        var markers = [
+            {
+                coords: { lat: 1.32293, lng: 103.92240 },
+                content: '750A Chai Chee Rd, #01-01 ESR BizPark @Chai Chee, Singapore 469001'
+            }
+        ];
+
+        // addmarker loop
+        for (var i = 0; i < markers.length; i++) {
+            addMarker(markers[i]);
+        }
+
+        function addMarker(props) {
+            var marker = new google.maps.Marker({
+                position: props.coords,
+                map: map,
+            });
+            // check content
+            if (props.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: props.content
+                });
+
+                marker.addListener('click', function () {
+                    infoWindow.open(map, marker);
+                });
+            }
+        }
+    }
+</script>
+{% endif %}
+{% endif %}
+{% endfor %}
 
 {% endblock %}

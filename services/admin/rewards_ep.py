@@ -99,6 +99,7 @@ def delete_rewards(id):
 @endpoint.route('/updateRewards/<id>/', methods=['GET', 'POST'])
 def update_rewards(id):
     update_rewards = CreateForm(request.form)
+    uploaded_file = CreateForm(request.files)
     if request.method == 'POST' and update_rewards.validate():
         rewards_dict = {}
         db = shelve.open(get_db(), 'w')
@@ -120,6 +121,11 @@ def update_rewards(id):
             reward.set_date_start(update_rewards.date_start.data)
             reward.set_date_expire(update_rewards.date_expire.data)
             reward.set_picture(update_rewards.picture.data)
+            f = uploaded_file.picture.data
+            if f != None:
+                filename = secure_filename(f.filename)
+                f.save(os.path.join(app.config['Upload_FOLDER'], filename))
+                reward.set_picture(filename)
 
             db['Rewards'] = rewards_dict
             db.close()
@@ -158,10 +164,10 @@ def availability(id):
     rewards_dict: dict = db['Rewards']
     rewards = rewards_dict.get(id)
     if rewards.get_status() == 'Available':
-        print(f"Event Key {rewards.get_uuid()} is inactivated!")
+        print(f"Reward Key {rewards.get_uuid()} is inactivated!")
         rewards.set_status('Unavailable')
     else:
-        print(f"Event Key {rewards.get_uuid()} is activated!")
+        print(f"Reward Key {rewards.get_uuid()} is activated!")
         rewards.set_status('Available')
     db['Rewards'] = rewards_dict
     db.close()

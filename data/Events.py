@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class Events:
 
@@ -62,7 +62,10 @@ class Events:
          4:'April', 5:'May', 6:'June',
          7:'July', 8:'August', 9:'September',
          10:'October', 11:'November', 12:'December'}
-        d_mth = int(str(d_list[1]).replace('0', ''))
+        if int(d_list[1]) != 10:
+            d_mth = int(str(d_list[1]).replace('0', ''))
+        else:
+            d_mth = int(str(d_list[1]))
         return f'{mth[d_mth]} {d_list[2]}, {d_list[0]} {self.start_time}' # "January 1, 2022 00:00:00"
 
     def add_user(self, key, value):
@@ -70,6 +73,20 @@ class Events:
 
     def get_user(self):
         return self.user
+
+    def set_user(self, user):
+        self.user = user
+
+    def get_oneday(self):
+        current_date = datetime.now()
+        d_list = str(self.date).rsplit('-')
+        et_list = str(self.end_time).rsplit(':')
+        end = datetime(int(d_list[0]), int(d_list[1]), int(d_list[2]),
+        int(et_list[0]), int(et_list[1]), int(et_list[2]))
+        if (end - current_date).days <= 0:
+            return True
+        else:
+            return False
 
 
 class Onsite(Events):

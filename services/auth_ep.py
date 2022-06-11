@@ -111,8 +111,14 @@ def sign_up(error = None , submit=None):
 
 @endpoint.route('/signout')
 def signout():
-    session.pop('username' , None)
-    session.pop('loggedin' , None)
+    try:
+        db = shelve.open(get_db() , 'w')
+        db['current_session'] = {}
+        db.close()
+        session.pop('username' , None)
+        session.pop('loggedin' , None)
+    except:
+        pass
     return redirect(url_for("base.home_page"))
 
 

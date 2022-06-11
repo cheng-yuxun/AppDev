@@ -1,3 +1,4 @@
+<!-- products detail html -->
 {% extends "layouts/base.html" %}
 {% block title %}Redstore - preview{% endblock %}
 
@@ -15,8 +16,8 @@
 
     .minus,
     .plus {
-        width: 20px;
-        height: 20px;
+        width: 40px;
+        height: 40px;
         background: #f2f2f2;
         border-radius: 4px;
         padding: 8px 5px 8px 5px;
@@ -41,41 +42,71 @@
 <div class="d-flex justify-content-center">
     <img src="{{url_for('static', filename='/media/img_prod/' + products_id.get_product_id() + '.png')}}"
         alt="product image" style="width: 400px; height: 400px;">
-</div>
 <div>
     <div class="col mb-5">
         <div class="card h-100">
             <div class="card-body p-4">
-                <div class="text-center">
+                <div>
                     <h1>{{ products_id.get_name() }}</h1>
-                    <h2>Price: {{ products_id.get_price() }}</h2>
+                    <h2>Price: ${{ products_id.get_price() }}</h2>
                     <h3>Stock: {{ products_id.get_stock() }}</h3>
                     <p>{{ products_id.get_comments() }}</p>
-
+                    {% if products_id.get_stock() > 0 %}
                     <div class="number">
                         <span class="minus">-</span>
-                        <input type="text" value="1" id="quantity"/>
+                        <input type="text" value="1" id="quantity" max="{{ products_id.get_stock() }}" />
                         <span class="plus">+</span>
                     </div>
-
-
+                    {% endif %}
                     <div class="col-lg-6">
+                        {% if products_id.get_stock() > 0 %}
+                        <!-- The Modal -->
                         <form action="{{url_for('base.addcart', id=products_id.get_product_id())}}"
                             id="products_id.get_product_id()">
-                            <div class="d-flex justify-content-end mt-4">
-                                <button onclick="quantity()"
-                                    class="btn btn-primary btn-sm w-50 h-30 d-flex align-items-center justify-content-center px-0"><i
-                                        class="bi bi-cart-fill"></i>Add to
-                                    Cart</button>
+                            <button type="button"
+                                class="btn btn-primary btn-sm w-50 h-30 d-flex align-items-center justify-content-center px-0"
+                                data-bs-toggle="modal" data-bs-target="#paymentModal_{{products_id.get_product_id()}}">
+                                <i class="bi bi-cart-fill"></i>
+                                Purchase
+                            </button>
+                            <div class="modal" id="paymentModal_{{products_id.get_product_id()}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Confirm Purchase</h4>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            Confirm purchasing {{ products_id.get_name() }}?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Cancel</button>
+                                            <button onclick="quantity()"
+                                                class="btn btn-primary">Pay</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
                         </form>
+                        {% else %}
+                        <button type="button"
+                                class="btn btn-secondary btn-sm w-100 h-30 d-flex align-items-center justify-content-center px-0">
+                                <i class="bi bi-cart-fill"></i>
+                                No Stock
+                            </button>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+</div>
 <script>
     $(document).ready(function () {
         $('.minus').click(function () {
@@ -98,11 +129,11 @@
 </script>
 <script>
     function quantity() {
-        const URL = '/addcart'
+        const URL = '/addcart/{{ products_id.get_product_id() }}'
         const xhr = new XMLHttpRequest();
         data = document.getElementById('quantity').value;
         xhr.open('POST', URL);
-        xhr.send(data)
+        xhr.send(parseInt(data))
     }
 
 </script>

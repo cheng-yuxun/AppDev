@@ -28,6 +28,22 @@ Onsite form
                     </thead>
                     <tbody>
                         <tr>
+                            <tr>
+                            <td>Product Name:</td>
+                            <td>{{ products_id.get_name()}}</td>
+                            </tr>
+                            <tr>
+                            <td>Product Price:</td>
+                            <td>${{ products_id.get_price()}}</td>
+                            </tr>
+                            <tr>
+                            <td>Product Type:</td>
+                            <td>{{ products_id.get_ptype()}}</td>
+                            </tr>
+                            <tr>
+                            <td>Quantity:</td>
+                            <td>{{ products_id.get_stock()}}</td>
+                            </tr>
                             <td>Status:</td>
                             <td>
                                 {% if products_id.get_status() == 'Available' %}

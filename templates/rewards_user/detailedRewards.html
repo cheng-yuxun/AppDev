@@ -4,26 +4,76 @@
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <link rel="stylesheet" href="/static/css/Navbar/navbar.css">
+
+        <title>Rewards Details</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles/Details.css') }}">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
     </head>
-    <body>
-        <div class="clientDetails">
-            <div id="custPoints" class="custPoints">Points available: {{points}}</div>
+    <nav class="navbar navbar-main navbar-expand-lg navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Logo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="d-flex justify-content-start">
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+
+
+                    {% if session['loggedin'] == 'user' %}
+                    <li id="dropdown">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-light"><i class="bi bi-person"></i> {{
+                                session['username'] }}</button>
+                            <button type="button"
+                                class="btn btn-outline-light dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/Profile">My Profile</a>
+                                <a class="dropdown-item" href="/AccountDetails">Account details</a>
+                                <a class="dropdown-item" href="/rewards_ava">Redeem Rewards</a>
+                                <a class="dropdown-item" href="/cart"><i class="bi-cart-fill me-1"></i>Purchase History</a>
+                                <a class="dropdown-item" href="/Friends">Friends</a>
+                                <a class="dropdown-item" href="/signout">Logout</a>
+                            </div>
+                        </div>
+                    </li>
+
+
+                    </li>
+                    {% endif %}
+
+                    {% if not session['loggedin'] %}
+                    <li class="nav-item"><a class="nav-link" href="#loginModal" data-bs-target="#loginModal"
+                            data-bs-toggle="modal" onclick="window.location.href = '/LoginPage'" >Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{url_for('auth.sign_up')}}">Sign Up</a></li>
+
+                    {% endif %}
+
+                </ul>
+            </div>
         </div>
-        <div class="detailed_rewards">
-            <div><img src="{{url_for('static', filename='assets/img/' + rewards.get_picture())}}" style="width: 640px"/></div>
-            <div class="impt_details">
-            <h1>Name: <div>{{ rewards.get_name() }}</div></h1>
+    </div>
+</nav>
+    <body>
+        <div class="closex" style="height:0;font-size:100; margin: 0 0 0 350;"><a href="/rewards_ava" style="position:relative; top:70;;text-decoration: none; color:black;">&times;</a></div>
+        <div class="detailed_rewards" style="border-style: solid;border-color: grey;">
+
+            <div><img src="{{url_for('static', filename='assets/img/' + rewards.get_picture())}}" style="width: 500px; margin:20 0 0 5;height:280; "/></div>
+            <div class="impt_details" style="float:left; margin: -270 550;">
+            <h2 style="max-width:400">Name: <div>{{ rewards.get_name() }}</div></h2>
             <h2>Points: <div id="rewardPoints">{{rewards.get_points() }}</div></h2>
             <h2> Description:</h2>
             <h3>{{rewards.get_description() }}</h3>
-            <button id="myBtn2">Redeem</button>
+            <button id="myBtn2" style="position:relative;right:370;">Redeem</button>
             <!-- The Modal -->
             <div id="myModal" class="modal">
 
@@ -126,7 +176,22 @@
 
 
 </script>
+        <!-- Core theme JS-->
+    <script src="/static/js/user/scripts.js"></script>
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiWhsUUguuj8luoSy4zCrfeKBO8QKpadg&callback=initMap">
+        </script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
     </body>
+
 </html>
 
 {% endblock %}

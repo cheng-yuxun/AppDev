@@ -17,20 +17,31 @@ def admin_frontpage():
     db = shelve.open(get_db(), flag='c')
     events_dict: dict = db['Events']
     users_dict: dict = db['Users']
+    products_dict: dict = db['Products']
     db.close()
-    print(f'{events_dict}')
-    events_list = []
+    eventcount: list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     for key in events_dict:
         events = events_dict.get(key)
-        events_list.append(events)
+        d_list = str(events.get_date()).rsplit('-')
+        if int(d_list[1]) != 10:
+            m = int(d_list[1].replace('0', ''))-1
+        else:
+            m = int(d_list[1])-1
+        eventcount[m] += 1
+
+    sold = 0
+    for key in products_dict:
+        products = products_dict.get(key)
+        sold += int(products.get_sold())
+    
     users_list = []
     for key in users_dict:
         users = users_dict.get(key)
         users_list.append(users)
     return render_template("admin/frontpage.html",
-                           events_list=events_list,
                            users_list=users_list,
-                           count=len(events_list))
+                           eventcount=eventcount,
+                           sold=sold)
 
 @endpoint.route("/notif")
 def notif():

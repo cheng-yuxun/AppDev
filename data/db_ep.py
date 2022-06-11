@@ -18,7 +18,11 @@ def create_db():
         'Rewards',
         'History',
         'registered',
-        'points'
+        'points',
+        'Accounts_created',
+        'Admin',
+        'expirytime',
+        'forgetful_user'
     }
     for x in labels:
         db[x] = {}

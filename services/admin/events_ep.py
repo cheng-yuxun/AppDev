@@ -62,7 +62,11 @@ def events():
                             else:
                                 filter(events)
                     else:
-                        filter(events)
+                        if eventfilter.status.data != '':
+                                if events.get_status() == eventfilter.status.data:
+                                    filter(events)
+                        else:
+                            filter(events)
             else:
                 if eventfilter.start_date.data is not None and eventfilter.end_date.data is not None:
                     if eventfilter.start_date.data <= events.get_date() <= eventfilter.end_date.data:
@@ -85,7 +89,6 @@ def events():
         count=len(events_list),
         eventfilter=eventfilter,
     )
-
 
 @endpoint.route("/events/add/onsite", methods=["GET", "POST"])
 def onsite_add():
@@ -111,10 +114,6 @@ def onsite_add():
         events_dict[onsite.get_uuid()] = onsite
         db["Events"] = events_dict
         db.close()
-        flash(
-            f"Onsite Event {onsite.get_name()} has been added successfully!",
-            category="success",
-        )
         return redirect(url_for("events.events"))
     return render_template("admin/events/form_onsite.html", form=form)
 

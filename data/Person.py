@@ -60,12 +60,26 @@ class User(Person):
         self.__cc = self.creditcard()
         self.__status = 'Active'
         self.cart = {}
+        self.productcart = {}
+        self.history = []
+
+    def addHistory(self,value):
+        self.history.append(value)
+
+    def gethistory(self):
+        return self.history
 
     def addcart(self, key, value):
         self.cart[key] = value
 
     def getcart(self):
         return self.cart
+
+    def addproductcart(self, a, b, c):
+        self.productcart[a] = [b, c]
+
+    def getproductcart(self):
+        return self.productcart
 
     def get_phonenumber(self):
         return self.__phonenumber

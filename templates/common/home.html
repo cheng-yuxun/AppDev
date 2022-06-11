@@ -1,3 +1,4 @@
+<!-- home html -->
 {% extends 'layouts/base.html' %}
 {% block title %}
 Home
@@ -27,7 +28,7 @@ Home
     <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With your mom</p>
+            <p class="lead fw-normal text-white-50 mb-0">With your family</p>
         </div>
     </div>
 </header>
@@ -37,8 +38,234 @@ Home
 
 
 {% if query is not none %}
-<h1>'{{ count }}' results for '{{ query }}'</h1>
+<h1
+    style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; color: firebrick; margin-left: 10px;">
+    '{{ count }}' results for '{{ query }}'</h1>
 {% endif %}
+
+
+
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th style="font-size: 30px;">Products:
+                <div class="btn-group" style="float: right; margin: 0px 110px 0px 0px;">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        style="width: 100px; height: 40px;">Filter
+                        by
+                    </button>
+                    <div class="dropdown-menu">
+                        <div>
+                            <form action="{{url_for('base.productfilter')}}" method="POST">
+                                <input type="checkbox" value="Shirt" name="shirtcheck">Shirt
+                                <br>
+                                <input type="checkbox" value="Footwear" name="footwearcheck">Footwear
+                                <br>
+                                <input type="checkbox" value="Pants" name="pantscheck">Pants
+                                <br>
+                                <input type="submit" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                {% if product_active_keys|length != 0 %}
+                <!-- events carousel -->
+                <div id="carouselProductControls" class="carousel slide" data-ride="carousel" data-interval="false">
+                    <div class="d-flex justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="row">
+                                        {% for active in product_active_keys %}
+                                        <div class="col-sm-3">
+                                            <div class="card h-100">
+                                                <!-- Product image-->
+                                                <img src="{{url_for('static', filename='media/img_prod/' + active.get_product_id() + '.png')}}"
+                                                    class="card-img-top img-fluid" alt="event image"
+                                                    data-bs-toggle="modal" id="events_img"
+                                                    data-bs-target="#myModal_{{active.get_product_id()}}">
+                                                <!-- Product details-->
+                                                <div class="card-body p-4">
+                                                    <div class="text-center">
+                                                        <!-- Product name-->
+                                                        <h5 class="fw-bolder">{{ active.get_name() }}</h5>
+                                                        {% if active.get_ptype() == 'Shirt' %}
+                                                        <p><button class="btn btn-warning"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif active.get_ptype() == 'Footwear' %}
+                                                        <p><button class="btn btn-info"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif active.get_ptype() == 'Pants' %}
+                                                        <p><button class="btn btn-success"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ active.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% endif %}
+                                                        <!-- Product price-->
+                                                        S${{ active.get_price() }}
+                                                    </div>
+                                                </div>
+                                                <!-- Product actions-->
+                                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                            href="products_detail/{{active.get_product_id()}}">View
+                                                            options</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- active modal -->
+                                        <div class="modal" id="myModal_{{active.get_product_id()}}" tabindex="-1">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content overflow-hidden border-0">
+                                                    <div class="modal-body p-0"><button
+                                                            class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0"
+                                                            type="button" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                        <div class="row align-items-stretch">
+                                                            <div class="col-lg-6 p-lg-0"><img
+                                                                    src="{{url_for('static', filename='media/img_prod/' + active.get_product_id() + '.png')}}"
+                                                                    class="card-img-top d-block h-100 img-fluid"
+                                                                    alt="product image">
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="p-4 my-md-4">
+                                                                    <h2>{{ active.get_name() }}</h2>
+                                                                    <p class="text-sm mb-4">{{ active.get_comments() }}
+                                                                    </p>
+                                                                    <a
+                                                                        href="products_detail/{{active.get_product_id()}}">
+                                                                        <button
+                                                                            class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0">View
+                                                                            Details</button>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="row">
+                                        {% for other in product_other_keys %}
+                                        <div class="col-sm-3">
+                                            <div class="card h-100">
+                                                <!-- Product image-->
+                                                <img src="{{url_for('static', filename='media/img_prod/' + other.get_product_id() + '.png')}}"
+                                                    class="card-img-top img-fluid" alt="event image"
+                                                    data-bs-toggle="modal" id="events_img"
+                                                    data-bs-target="#myModal_{{other.get_product_id()}}">
+                                                <!-- Product details-->
+                                                <div class="card-body p-4">
+                                                    <div class="text-center">
+                                                        <!-- Product name-->
+                                                        <h5 class="fw-bolder">{{ other.get_name() }}</h5>
+                                                        {% if other.get_ptype() == 'Shirt' %}
+                                                        <p><button class="btn btn-warning"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif other.get_ptype() == 'Footwear' %}
+                                                        <p><button class="btn btn-info"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% elif other.get_ptype() == 'Pants' %}
+                                                        <p><button class="btn btn-success"
+                                                                style="width: 80px; height: 35px;">
+                                                                <p style="font-size: small;">{{ other.get_ptype() }}
+                                                                </p>
+                                                            </button></p>
+                                                        {% endif %}
+                                                        <!-- Product price-->
+                                                        S${{ other.get_price() }}
+                                                    </div>
+                                                </div>
+                                                <!-- Product actions-->
+                                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                            href="products_detail/{{other.get_product_id()}}">View
+                                                            options</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- other modal -->
+                                        <div class="modal" id="myModal_{{other.get_product_id()}}" tabindex="-1">
+                                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                <div class="modal-content overflow-hidden border-0">
+                                                    <div class="modal-body p-0"><button
+                                                            class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0"
+                                                            type="button" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                        <div class="row align-items-stretch">
+                                                            <div class="col-lg-6 p-lg-0"><img
+                                                                    src="{{url_for('static', filename='media/img_prod/' + other.get_product_id() + '.png')}}"
+                                                                    class="card-img-top d-block h-100 img-fluid"
+                                                                    alt="product image">
+                                                            </div>
+                                                            <div class="col-lg-6">
+                                                                <div class="p-4 my-md-4">
+                                                                    <h2>{{ other.get_name() }}</h2>
+                                                                    <p class="text-sm mb-4">{{ other.get_comments() }}
+                                                                    </p>
+                                                                    <a
+                                                                        href="products_detail/{{other.get_product_id()}}">
+                                                                        <button
+                                                                            class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0">View
+                                                                            Details</button>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselProductControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselProductControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-center">
+                    <p>No Products Available</p>
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </tbody>
+</table>
 
 <table class="table table-borderless">
     <thead>
@@ -244,213 +471,11 @@ Home
     </tbody>
 </table>
 
-<table class="table table-borderless">
-    <thead>
-        <tr>
-            <th style="font-size: 30px;">Products:
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-                {% if product_active_keys|length != 0 %}
-                <!-- events carousel -->
-                <div id="carouselProductControls" class="carousel slide" data-ride="carousel" data-interval="false">
-                    <div class="d-flex justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <div class="row">
-                                        {% for active in product_active_keys %}
-                                        <div class="col-sm-3">
-                                            <div class="card h-100">
-                                                <!-- Product image-->
-                                                <img src="{{url_for('static', filename='media/img_prod/' + active.get_product_id() + '.png')}}"
-                                                    class="card-img-top img-fluid" alt="event image"
-                                                    data-bs-toggle="modal" id="events_img"
-                                                    data-bs-target="#myModal_{{active.get_product_id()}}">
-                                                <!-- Product details-->
-                                                <div class="card-body p-4">
-                                                    <div class="text-center">
-                                                        <!-- Product name-->
-                                                        <h5 class="fw-bolder">{{ active.get_name() }}</h5>
-                                                        {% if active.get_ptype() == 'Shirt' %}
-                                                        <p><button class="btn btn-warning"
-                                                                style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ active.get_ptype() }}
-                                                                </p>
-                                                            </button></p>
-                                                        {% elif active.get_ptype() == 'Footwear' %}
-                                                        <p><button class="btn btn-info"
-                                                                style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ active.get_ptype() }}
-                                                                </p>
-                                                            </button></p>
-                                                        {% elif active.get_ptype() == 'Pants' %}
-                                                        <p><button class="btn btn-success"
-                                                            style="width: 80px; height: 35px;">
-                                                            <p style="font-size: small;">{{ active.get_ptype() }}
-                                                            </p>
-                                                        </button></p>
-                                                        {% endif %}
-                                                        <!-- Product price-->
-                                                        {{ active.get_price() }}
-                                                    </div>
-                                                </div>
-                                                <!-- Product actions-->
-                                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                                            href="products_detail/{{active.get_product_id()}}">View
-                                                            options</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- active modal -->
-                                        <div class="modal" id="myModal_{{active.get_product_id()}}" tabindex="-1">
-                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                <div class="modal-content overflow-hidden border-0">
-                                                    <div class="modal-body p-0"><button
-                                                            class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0"
-                                                            type="button" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                        <div class="row align-items-stretch">
-                                                            <div class="col-lg-6 p-lg-0"><img
-                                                                    src="{{url_for('static', filename='media/img_prod/' + active.get_product_id() + '.png')}}"
-                                                                    class="card-img-top d-block h-100 img-fluid"
-                                                                    alt="product image">
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="p-4 my-md-4">
-                                                                    <h2>{{ active.get_name() }}</h2>
-                                                                    <p class="text-sm mb-4">{{ active.get_comments() }}
-                                                                    </p>
-                                                                    <a
-                                                                        href="products_detail/{{active.get_product_id()}}">
-                                                                        <button
-                                                                            class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0">View
-                                                                            Details</button>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="carousel-item">
-                                    <div class="row">
-                                        {% for other in product_other_keys %}
-                                        <div class="col-sm-3">
-                                            <div class="card h-100">
-                                                <!-- Product image-->
-                                                <img src="{{url_for('static', filename='media/event_img/' + other.get_product_id() + '.png')}}"
-                                                    class="card-img-top img-fluid" alt="event image"
-                                                    data-bs-toggle="modal" id="events_img"
-                                                    data-bs-target="#myModal_{{other.get_product_id()}}">
-                                                <!-- Product details-->
-                                                <div class="card-body p-4">
-                                                    <div class="text-center">
-                                                        <!-- Product name-->
-                                                        <h5 class="fw-bolder">{{ other.get_name() }}</h5>
-                                                        {% if other.get_ptype() == 'Shirt' %}
-                                                        <p><button class="btn btn-warning"
-                                                                style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ other.get_ptype() }}
-                                                                </p>
-                                                            </button></p>
-                                                        {% elif other.get_ptype() == 'Footwear' %}
-                                                        <p><button class="btn btn-info"
-                                                                style="width: 80px; height: 35px;">
-                                                                <p style="font-size: small;">{{ other.get_ptype() }}
-                                                                </p>
-                                                            </button></p>
-                                                        {% elif other.get_ptype() == 'Pants' %}
-                                                        <p><button class="btn btn-success"
-                                                            style="width: 80px; height: 35px;">
-                                                            <p style="font-size: small;">{{ other.get_ptype() }}
-                                                            </p>
-                                                        </button></p>
-                                                        {% endif %}
-                                                        <!-- Product price-->
-                                                        {{ other.get_price() }}
-                                                    </div>
-                                                </div>
-                                                <!-- Product actions-->
-                                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
-                                                            href="products_detail/{{other.get_product_id()}}">View
-                                                            options</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- other modal -->
-                                        <div class="modal" id="myModal_{{other.get_product_id()}}" tabindex="-1">
-                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                <div class="modal-content overflow-hidden border-0">
-                                                    <div class="modal-body p-0"><button
-                                                            class="btn-close p-4 position-absolute top-0 end-0 z-index-20 shadow-0"
-                                                            type="button" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                        <div class="row align-items-stretch">
-                                                            <div class="col-lg-6 p-lg-0"><img
-                                                                    src="{{url_for('static', filename='media/img_prod/' + other.get_product_id() + '.png')}}"
-                                                                    class="card-img-top d-block h-100 img-fluid"
-                                                                    alt="product image">
-                                                            </div>
-                                                            <div class="col-lg-6">
-                                                                <div class="p-4 my-md-4">
-                                                                    <h2>{{ other.get_name() }}</h2>
-                                                                    <p class="text-sm mb-4">{{ other.get_comments() }}
-                                                                    </p>
-                                                                    <a
-                                                                        href="products_detail/{{other.get_product_id()}}">
-                                                                        <button
-                                                                            class="btn btn-dark btn-sm w-100 h-100 d-flex align-items-center justify-content-center px-0">View
-                                                                            Details</button>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselProductControls" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselProductControls" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
-                {% else %}
-                <div class="d-flex justify-content-center">
-                    <p>No Products Available</p>
-                </div>
-                {% endif %}
-            </td>
-        </tr>
-    </tbody>
-</table>
-
 <script>
 
-    $(document).ready(function(){
-    $("#flashes").delay(5000).slideUp(300);
-});
+    $(document).ready(function () {
+        $("#flashes").delay(5000).slideUp(300);
+    });
 
 </script>
 

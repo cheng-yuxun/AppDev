@@ -64,7 +64,7 @@ Onsite form
                                 {% elif events_id.get_status() == 'Ongoing' %}
                                 <button class="btn btn-warning" style="margin: 0px 5px;">{{ events_id.get_status()
                                     }}</button>
-                                {% elif events_id.get_status() == 'Invalid' %}
+                                {% elif events_id.get_status() == 'Expired' %}
                                 <button class="btn btn-secondary" style="margin: 0px 5px;">{{ events_id.get_status()
                                     }}</button>
                                 {% elif events_id.get_status() == 'Full' %}
@@ -82,29 +82,21 @@ Onsite form
                             <td>{{ events_id.get_category() }}</td>
                         </tr>
                         <tr>
-                            <td>Start Time:</td>
-                            <td>{{ events_id.get_start_time() }}</td>
+                            <td>Date:</td>
+                            <td>{{ events_id.get_date() }}</td>
                         </tr>
                         <tr>
-                            <td>End Time:</td>
-                            <td>{{ events_id.get_end_time() }}</td>
+                            <td>Time:</td>
+                            <td>{{ events_id.get_start_time() }}-{{ events_id.get_end_time() }}</td>
                         </tr>
                         {% if events_id.get_category() == 'Onsite' %}
                         <tr>
                             <td>Quantity (Pax):</td>
-                            <td>{{ events_id.get_quantity() }}</td>
+                            <td>{{ events_id.get_sold() }}/{{ events_id.get_quantity() }}</td>
                         </tr>
                         <tr>
                             <td>Price:</td>
                             <td>${{ events_id.get_price() }}</td>
-                        </tr>
-                        <tr>
-                            <td>Capacity:</td>
-                            <td>{{ events_id.get_remainder() }}</td>
-                        </tr>
-                        <tr>
-                            <td>Sold:</td>
-                            <td>{{ events_id.get_sold() }}</td>
                         </tr>
                         <tr>
                             <td>Location:</td>
@@ -153,14 +145,14 @@ Onsite form
                             </tbody>
                         </table>
                         {% if events_id.get_category() == 'Onsite' %}
-                        {% if events_id.get_remainder() == 'Full' %}
+                        {% if events_id.get_status() == 'Full' %}
                         <p>This events has been fully booked!</p>
                         {% else %}
                         <p>Total Number Of Participant(s): {{ events_id.get_sold() }}/{{ events_id.get_quantity()
                             }}</p>
                         {% endif %}
                         {% else %}
-                        <p>Total Number Of Sign-Up(s): 0/0</p>
+                        <p>Total Number Of Sign-Up(s): {{ events_id.get_sold() }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -284,7 +276,7 @@ Onsite form
                     function initMap() {
                         // map options
                         var options = {
-                            zoom: 12,
+                            zoom: 18,
                             center: { lat: 1.32292, lng: 103.92240 }
                         }
 

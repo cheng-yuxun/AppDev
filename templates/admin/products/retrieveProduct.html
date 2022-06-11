@@ -58,13 +58,13 @@
         <tr>
           <td>{{ product.get_product_id() }}</td>
           <td><a href="/admin/product_details/{{product.get_product_id()}}">{{ product.get_name() }}</a></td>
-          <td>{{ product.get_price() }}</td>
-          {% if product.get_ptype() == "S" %}
+          <td>${{ product.get_price() }}</td>
+          {% if product.get_ptype() == "Shirt" %}
           <td>Shirt</td>
-          {% elif product.get_ptype() == "F" %}
+          {% elif product.get_ptype() == "Footwear" %}
           <td>Footwear</td>
-          {% elif product.get_ptype() == "O" %}
-          <td>Others</td>
+          {% elif product.get_ptype() == "Pants" %}
+          <td>Pants</td>
           {% endif %}
           <td>
             <div class="d-flex justify-content-center">

@@ -4,17 +4,15 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/Details.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
-    <title>Title</title>
+    <title>Summary</title>
 </head>
 <body>
-    <div class="clientDetails">
-        <div class="custPoints">Points available: {{points}}</div>
-    </div>
-    <div id="user">
+
+    <div id="user" style="margin: 200 700">
         <div><h1>Number of vouchers redeemed: {{qty}}</h1></div><br>
         <div><h1>Points deducted: {{redeemedPts}}</h1></div><br>
         <div><h1>Points remaining: {{points}}</h1></div><br>
-        <button id="myBtn2"><a href="/rewards_ava">Back to vouchers</a></button>
+        <button id="myBtn2" style="padding:10 80;position:relative;right:240;width:100%"><a href="/rewards_ava">Back to vouchers</a></button>
     </div>
 
 

@@ -14,16 +14,7 @@
         <div class="d-flex justify-content-start">
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <form action="{{url_for('base.cart')}}" class="d-flex">
-                            <button class="btn btn-outline-light" type="submit">
-                                <i class="bi-cart-fill me-1"></i>
-                                Cart
-                                <span class="badge bg-dark text-white ms-1 rounded-pill" id="cartnumber">{{ cart
-                                    }}</span>
-                            </button>
-                        </form>
-                    </li>
+                    
 
                     {% if session['loggedin'] == 'user' %}
                     <li id="dropdown">
@@ -38,7 +29,7 @@
                                 <a class="dropdown-item" href="/Profile">My Profile</a>
                                 <a class="dropdown-item" href="/AccountDetails">Account details</a>
                                 <a class="dropdown-item" href="/rewards_ava">Redeem Rewards</a>
-                                <a class="dropdown-item" href="/">Event History</a>
+                                <a class="dropdown-item" href="/cart"><i class="bi-cart-fill me-1"></i>Purchase History</a>
                                 <a class="dropdown-item" href="/Friends">Friends</a>
                                 <a class="dropdown-item" href="/signout">Logout</a>
                             </div>
